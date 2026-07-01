@@ -1,5 +1,4 @@
-// 면접일, 과제 제출일, 마감일
-export type ScheduleType = "interview" | "assignment" | "deadline";
+export type ScheduleType = 'interview' | 'assignment' | 'deadline' | 'followUp';
 
 export interface Schedule {
   id: string;

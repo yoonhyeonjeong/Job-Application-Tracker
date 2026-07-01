@@ -9,15 +9,13 @@ interface UpcomingSchedulesProps {
 }
 
 const scheduleTypeLabels: Record<ScheduleType, string> = {
-  interview: "면접일",
-  assignment: "과제일 제출",
-  deadline: "마감일",
+  interview: "면접",
+  assignment: "과제 제출",
+  deadline: "마감",
+  followUp: "후속"
 };
 
-export const UpcomingSchedules = ({
-  schedules,
-  loading,
-}: UpcomingSchedulesProps): ReactNode => {
+export const UpcomingSchedules = ({ schedules, loading }: UpcomingSchedulesProps): ReactNode => {
   return (
     <Card title="다가오는 일정">
       <List<Schedule>
@@ -30,9 +28,7 @@ export const UpcomingSchedules = ({
                 <Tag>{scheduleTypeLabels[schedule.type]}</Tag>
                 <Typography.Text strong>{schedule.title}</Typography.Text>
               </Space>
-              <Typography.Text type="secondary">
-                {formatDateTime(schedule.scheduledAt)}
-              </Typography.Text>
+              <Typography.Text type="secondary">{formatDateTime(schedule.scheduledAt)}</Typography.Text>
             </Space>
           </List.Item>
         )}

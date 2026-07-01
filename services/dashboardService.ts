@@ -25,11 +25,7 @@ export const getDashboardSummary = async (): Promise<DashboardSummary> => {
 
 export const getRecentApplications = async (): Promise<Application[]> => {
   const applications = await getApplications();
-  return [...applications]
-    .sort(
-      (left, right) => Date.parse(right.updatedAt) - Date.parse(left.updatedAt),
-    )
-    .slice(0, 5);
+  return [...applications].slice(0, 5);
 };
 
 export const getUpcomingSchedules = async (): Promise<Schedule[]> => {

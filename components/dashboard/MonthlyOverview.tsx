@@ -3,17 +3,17 @@
 import { Card, Space } from "antd";
 import type { ReactNode } from "react";
 import type { StatusOverviewItem } from "@/types/dashboard";
-import { StatusChart } from "./StatusChart";
+import { MonthlyChart } from "./MonthlyChart";
 
-interface StatusOverviewProps {
+interface MonthlyOverviewProps {
   items: StatusOverviewItem[];
 }
 
-export const StatusOverview = ({ items }: StatusOverviewProps): ReactNode => {
+export const MonthlyOverview = ({ items }: MonthlyOverviewProps): ReactNode => {
   return (
-    <Card title="지원 현황">
+    <Card title="월별 지원 추이">
       <Space direction="vertical" className="full-width" size="middle">
-        <StatusChart items={items} />
+        <MonthlyChart items={items} />
       </Space>
     </Card>
   );

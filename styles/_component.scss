@@ -1,0 +1,44 @@
+.status-chart-container {
+  width: 100%;
+  display: flex;
+  .status-chart-area {
+    width: 50%;
+    height: 260px;
+  }
+
+  .chart-legend-table {
+    flex: 1;
+  }
+  .chart-legend-head {
+    font-size: 16px;
+    font-weight: 600;
+    margin-bottom: 8px;
+  }
+  .chart-legend-row {
+    display: grid;
+    grid-template-columns: 1fr auto;
+    align-items: center;
+    padding: 8px 0;
+    font-size: 14px;
+  }
+
+  .chart-legend-name {
+    display: flex;
+    align-items: center;
+    gap: 8px;
+
+    i {
+      width: 8px;
+      height: 8px;
+      border-radius: 50%;
+    }
+  }
+}
+.monthly-chart-container {
+  width: 100%;
+
+  .monthly-chart-area {
+    width: 100%;
+    height: 260px;
+  }
+}

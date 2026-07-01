@@ -1,7 +1,7 @@
-import { Tag } from 'antd';
-import type { ReactNode } from 'react';
-import type { ApplicationStatus } from '@/types/application';
-import { statusColors, statusLabels } from '@/utils/status';
+import { Tag } from "antd";
+import type { ReactNode } from "react";
+import type { ApplicationStatus } from "@/types/application";
+import { statusColors, statusLabels } from "@/utils/status";
 
 interface StatusTagProps {
   status: ApplicationStatus;

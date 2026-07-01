@@ -1,13 +1,13 @@
 "use client";
 
 import { Col, Row } from "antd";
-import type { ReactNode } from "react";
 import { PageHeader } from "@/components/common/PageHeader";
 import { RecentApplicationsTable } from "@/components/dashboard/RecentApplicationsTable";
 import { StatusOverview } from "@/components/dashboard/StatusOverview";
 import { SummaryCards } from "@/components/dashboard/SummaryCards";
 import { UpcomingSchedules } from "@/components/dashboard/UpcomingSchedules";
 import { useDashboard } from "@/hooks/useDashboard";
+import { MonthlyOverview } from "@/components/dashboard/MonthlyOverview";
 
 const DashboardPage = () => {
   const {
@@ -39,7 +39,7 @@ const DashboardPage = () => {
           <StatusOverview items={statusOverview} />
         </Col>
         <Col xs={24} xl={12}>
-          <StatusOverview items={statusOverview} />
+          <MonthlyOverview items={statusOverview} />
         </Col>
       </Row>
     </div>
