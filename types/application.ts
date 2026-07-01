@@ -35,6 +35,8 @@ export interface Application {
   nextActionDate?: string;
   salaryRange?: string;
   memo?: string;
+  createdAt: string;
+  updatedAt: string;
 }
 
 export type ApplicationCreatePayload = Omit<
