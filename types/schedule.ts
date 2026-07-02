@@ -1,4 +1,4 @@
-export type ScheduleType = 'interview' | 'assignment' | 'deadline' | 'followUp';
+export type ScheduleType = "interview" | "assignment" | "deadline";
 
 export interface Schedule {
   id: string;

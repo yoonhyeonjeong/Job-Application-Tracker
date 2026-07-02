@@ -12,15 +12,13 @@ interface ScheduleListProps {
 const scheduleTypeLabels: Record<ScheduleType, string> = {
   interview: '면접',
   assignment: '과제',
-  deadline: '마감',
-  followUp: '후속'
+  deadline: '마감'
 };
 
 const tagColors: Record<ScheduleType, string> = {
   interview: 'blue',
   assignment: 'gold',
-  deadline: 'default',
-  followUp: 'green'
+  deadline: 'default'
 };
 
 export const ScheduleList = ({ schedules }: ScheduleListProps): ReactNode => {

@@ -1,4 +1,5 @@
 import { StatusOverviewItem } from "@/types/dashboard";
+import dayjs from "dayjs";
 import {
   LineChart,
   Line,
@@ -9,11 +10,6 @@ import {
   Tooltip,
 } from "recharts";
 
-// interface MonthlyApplicationTrendItem {
-//   month: string;
-//   count: number;
-// }
-
 interface MonthlyOverviewProps {
   items: StatusOverviewItem[];
 }
@@ -21,25 +17,35 @@ interface MonthlyOverviewProps {
 export const MonthlyChart = ({ items }: MonthlyOverviewProps) => {
   const dummyData = [
     {
-      month: "5월",
+      month: "2026-01",
+      count: 5,
+    },
+    {
+      month: "2026-02",
+      count: 8,
+    },
+    {
+      month: "2026-03",
+      count: 3,
+    },
+    {
+      month: "2026-04",
       count: 10,
     },
-    {
-      month: "6월",
-      count: 20,
-    },
-    {
-      month: "7월",
-      count: 30,
-    },
   ];
-  console.log("MonthlyChart items:", items);
+  // 더미데이터 가공
+  const chartData = dummyData.map((item) => {
+    return {
+      month: dayjs(item.month).format("MM월"),
+      count: item.count,
+    };
+  });
   return (
     <div className="monthly-chart-container">
       <div className="monthly-chart-area">
         <ResponsiveContainer width="100%" height="100%">
           <LineChart
-            data={dummyData}
+            data={chartData}
             margin={{ top: 12, right: 16, left: -20, bottom: 0 }}
           >
             <CartesianGrid strokeDasharray="3 3" vertical={false} />

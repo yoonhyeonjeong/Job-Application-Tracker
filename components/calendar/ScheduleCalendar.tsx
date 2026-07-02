@@ -13,15 +13,13 @@ interface ScheduleCalendarProps {
 const scheduleTypeLabels: Record<ScheduleType, string> = {
   interview: '면접',
   assignment: '과제',
-  deadline: '마감',
-  followUp: '후속'
+  deadline: '마감'
 };
 
 const badgeStatuses: Record<ScheduleType, 'success' | 'processing' | 'warning' | 'default'> = {
   interview: 'processing',
   assignment: 'warning',
-  deadline: 'default',
-  followUp: 'success'
+  deadline: 'default'
 };
 
 export const ScheduleCalendar = ({ schedules }: ScheduleCalendarProps): ReactNode => {

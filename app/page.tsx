@@ -17,7 +17,7 @@ const DashboardPage = () => {
     statusOverview,
     loading,
   } = useDashboard();
-
+  console.log(upcomingSchedules, "업커밍");
   return (
     <div className="page-stack">
       <PageHeader

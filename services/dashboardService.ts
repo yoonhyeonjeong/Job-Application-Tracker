@@ -29,13 +29,7 @@ export const getRecentApplications = async (): Promise<Application[]> => {
 };
 
 export const getUpcomingSchedules = async (): Promise<Schedule[]> => {
-  return [...schedulesMock]
-    .filter((schedule) => Date.parse(schedule.scheduledAt) >= Date.now())
-    .sort(
-      (left, right) =>
-        Date.parse(left.scheduledAt) - Date.parse(right.scheduledAt),
-    )
-    .slice(0, 6);
+  return [...schedulesMock];
 };
 
 export const getStatusOverview = async (): Promise<StatusOverviewItem[]> => {
