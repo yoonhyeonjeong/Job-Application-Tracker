@@ -1,17 +1,21 @@
-'use client';
+"use client";
 
-import { Button, Input, Select, Space } from 'antd';
-import type { ReactNode } from 'react';
-import { useApplicationFilters } from '@/hooks/useApplicationFilters';
-import type { ApplicationFilterParams } from '@/types/application';
+import { Button, Input, Select, Space } from "antd";
+import type { ReactNode } from "react";
+import { useApplicationFilters } from "@/hooks/useApplicationFilters";
+import type { ApplicationFilterParams } from "@/types/application";
 
 interface ApplicationFilterProps {
   filters: ApplicationFilterParams;
   onChange: (filters: ApplicationFilterParams) => void;
 }
 
-export const ApplicationFilter = ({ filters, onChange }: ApplicationFilterProps): ReactNode => {
-  const { statusOptions, employmentTypeOptions, workTypeOptions } = useApplicationFilters();
+export const ApplicationFilter = ({
+  filters,
+  onChange,
+}: ApplicationFilterProps): ReactNode => {
+  const { statusOptions, employmentTypeOptions, workTypeOptions } =
+    useApplicationFilters();
 
   return (
     <Space wrap className="filter-bar">
@@ -19,7 +23,9 @@ export const ApplicationFilter = ({ filters, onChange }: ApplicationFilterProps)
         allowClear
         placeholder="회사명, 직무, 메모 검색"
         value={filters.keyword}
-        onChange={(event) => onChange({ ...filters, keyword: event.target.value })}
+        onChange={(event) =>
+          onChange({ ...filters, keyword: event.target.value })
+        }
       />
       <Select
         allowClear
@@ -37,14 +43,7 @@ export const ApplicationFilter = ({ filters, onChange }: ApplicationFilterProps)
         value={filters.employmentType}
         onChange={(employmentType) => onChange({ ...filters, employmentType })}
       />
-      <Select
-        allowClear
-        placeholder="근무 형태"
-        className="filter-select"
-        options={workTypeOptions}
-        value={filters.workType}
-        onChange={(workType) => onChange({ ...filters, workType })}
-      />
+
       <Button onClick={() => onChange({})}>초기화</Button>
     </Space>
   );

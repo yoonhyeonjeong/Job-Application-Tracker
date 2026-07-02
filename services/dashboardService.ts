@@ -18,7 +18,7 @@ export const getDashboardSummary = async (): Promise<DashboardSummary> => {
       (schedule) => schedule.type === "interview",
     ).length,
     waitingCount: applications.filter(
-      (application) => application.status === "screening",
+      (application) => application.status === "applied",
     ).length,
   };
 };

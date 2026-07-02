@@ -1,12 +1,11 @@
 export type ApplicationStatus =
-  | "applied"
-  | "screening"
-  | "interview"
-  | "offer"
-  | "rejected"
-  | "onHold";
+  | "applied" // 지원완료
+  | "documentPassed" // 서류통과
+  | "interview" // 면접 예정
+  | "offer" // 오퍼
+  | "rejected"; // 불합격
 
-export type EmploymentType = "fullTime" | "contract" | "intern" | "freelance";
+export type EmploymentType = "fullTime" | "contract" | "freelance";
 
 export type WorkType = "onsite" | "remote" | "hybrid";
 

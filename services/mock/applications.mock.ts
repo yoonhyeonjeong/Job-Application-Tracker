@@ -6,7 +6,7 @@ export const applicationsMock: Application[] = [
     companyName: "네이버 클라우드",
     position: "프론트엔드 개발자",
     status: "interview",
-    employmentType: "fullTime",
+    employmentType: "freelance",
     workType: "hybrid",
     companyType: "SERVICE",
     jobUrl: "https://example.com/naver-cloud-frontend",
@@ -18,14 +18,14 @@ export const applicationsMock: Application[] = [
     salaryRange: "Negotiable",
     memo: "React, TypeScript, dashboard experience emphasized.",
     createdAt: "2026-06-12T09:00:00.000Z",
-    updatedAt: "2026-06-25T11:30:00.000Z"
+    updatedAt: "2026-06-25T11:30:00.000Z",
   },
   {
     id: "app-2",
     companyName: "Kakao Pay",
     position: "프론트엔드 개발자",
-    status: "screening",
-    employmentType: "fullTime",
+    status: "documentPassed",
+    employmentType: "freelance",
     workType: "hybrid",
     companyType: "SERVICE",
     location: "Pangyo",
@@ -35,7 +35,7 @@ export const applicationsMock: Application[] = [
     nextActionDate: "2026-07-01",
     memo: "Fintech domain and design system experience match.",
     createdAt: "2026-06-18T10:20:00.000Z",
-    updatedAt: "2026-06-22T08:40:00.000Z"
+    updatedAt: "2026-06-22T08:40:00.000Z",
   },
   {
     id: "app-3",
@@ -51,7 +51,7 @@ export const applicationsMock: Application[] = [
     nextActionDate: "2026-07-02",
     memo: "Platform team, performance optimization preferred.",
     createdAt: "2026-06-24T12:10:00.000Z",
-    updatedAt: "2026-06-24T12:10:00.000Z"
+    updatedAt: "2026-06-24T12:10:00.000Z",
   },
   {
     id: "app-4",
@@ -68,7 +68,7 @@ export const applicationsMock: Application[] = [
     salaryRange: "Open",
     memo: "Need compare benefits and growth track.",
     createdAt: "2026-05-29T07:30:00.000Z",
-    updatedAt: "2026-06-28T13:15:00.000Z"
+    updatedAt: "2026-06-28T13:15:00.000Z",
   },
   {
     id: "app-5",
@@ -82,6 +82,6 @@ export const applicationsMock: Application[] = [
     appliedAt: "2026-05-15",
     memo: "Rejected after final interview. Improve system design answers.",
     createdAt: "2026-05-15T02:20:00.000Z",
-    updatedAt: "2026-06-20T03:10:00.000Z"
-  }
+    updatedAt: "2026-06-20T03:10:00.000Z",
+  },
 ];
