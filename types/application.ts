@@ -18,6 +18,7 @@ export type CompanyType =
   | "INHOUSE"
   | "STARTUP";
 
+// 지원 response ?아마
 export interface Application {
   id: string;
   companyName: string;
@@ -26,7 +27,7 @@ export interface Application {
   employmentType: EmploymentType;
   workType: WorkType;
   companyType: CompanyType;
-  jobUrl?: string;
+  jobPlatform?: string;
   location?: string;
   appliedAt?: string;
   deadline?: string;
@@ -45,9 +46,25 @@ export type ApplicationCreatePayload = Omit<
 
 export type ApplicationUpdatePayload = Partial<ApplicationCreatePayload>;
 
+// 지원등록 검색
 export interface ApplicationFilterParams {
   keyword?: string;
   status?: ApplicationStatus;
   employmentType?: EmploymentType;
   workType?: WorkType;
+}
+
+// 지원등록 payload
+export interface CreateApplicationPayload {
+  companyName: string; // 회사명
+  companyType: CompanyType; // 회사유형
+  position: string; // 직무
+  employmentType: EmploymentType; // 고용형태
+  workType: WorkType; // 근무형태
+  jobPlatform: string; // 지원 플랫폼
+  location?: string; // 지역
+  appliedAt?: string; // 지원일
+  deadline?: string; // 마감일
+  nextAction?: string; // 다음 행동
+  memo?: string; // 메모
 }

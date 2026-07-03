@@ -2,30 +2,21 @@
 
 import { PlusOutlined } from "@ant-design/icons";
 import { Alert, Button, Card, message } from "antd";
-import { useState, type ReactNode } from "react";
+import { type ReactNode } from "react";
 import { ApplicationFilter } from "@/components/applications/ApplicationFilter";
-import { ApplicationFormModal } from "@/components/applications/ApplicationFormModal";
 import { ApplicationTable } from "@/components/applications/ApplicationTable";
 import { PageHeader } from "@/components/common/PageHeader";
 import { useApplications } from "@/hooks/useApplications";
 import { useApplicationStore } from "@/hooks/useApplicationStore";
-import type { ApplicationCreatePayload } from "@/types/application";
+import { useRouter } from "next/navigation";
 
 const ApplicationsPage = (): ReactNode => {
   const { applications, loading, filters, setFilters } = useApplications();
   const addApplication = useApplicationStore((state) => state.addApplication);
   const error = useApplicationStore((state) => state.error);
-  const [open, setOpen] = useState<boolean>(false);
   const [messageApi, contextHolder] = message.useMessage();
 
-  const handleSubmit = async (
-    payload: ApplicationCreatePayload,
-  ): Promise<void> => {
-    await addApplication(payload);
-    setOpen(false);
-    void messageApi.success("지원 내역을 추가했습니다.");
-  };
-
+  const router = useRouter();
   return (
     <div className="page-stack">
       {contextHolder}
@@ -36,9 +27,9 @@ const ApplicationsPage = (): ReactNode => {
           <Button
             type="primary"
             icon={<PlusOutlined />}
-            onClick={() => setOpen(true)}
+            onClick={() => router.push(`/applications/new`)}
           >
-            지원 추가
+            지원 하러 가기
           </Button>
         }
       />
@@ -49,11 +40,6 @@ const ApplicationsPage = (): ReactNode => {
       <Card>
         <ApplicationTable applications={applications} loading={loading} />
       </Card>
-      <ApplicationFormModal
-        open={open}
-        onCancel={() => setOpen(false)}
-        onSubmit={handleSubmit}
-      />
     </div>
   );
 };

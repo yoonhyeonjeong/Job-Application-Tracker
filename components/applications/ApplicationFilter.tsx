@@ -2,8 +2,8 @@
 
 import { Button, Input, Select, Space } from "antd";
 import type { ReactNode } from "react";
-import { useApplicationFilters } from "@/hooks/useApplicationFilters";
 import type { ApplicationFilterParams } from "@/types/application";
+import { employmentTypeOptions, statusOptions } from "@/utils/format";
 
 interface ApplicationFilterProps {
   filters: ApplicationFilterParams;
@@ -14,14 +14,11 @@ export const ApplicationFilter = ({
   filters,
   onChange,
 }: ApplicationFilterProps): ReactNode => {
-  const { statusOptions, employmentTypeOptions, workTypeOptions } =
-    useApplicationFilters();
-
   return (
     <Space wrap className="filter-bar">
       <Input.Search
         allowClear
-        placeholder="회사명, 직무, 메모 검색"
+        placeholder="회사명, 직무"
         value={filters.keyword}
         onChange={(event) =>
           onChange({ ...filters, keyword: event.target.value })
