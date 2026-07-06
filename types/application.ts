@@ -9,6 +9,8 @@ export type EmploymentType = "fullTime" | "contract" | "freelance";
 
 export type WorkType = "onsite" | "remote" | "hybrid";
 
+export type JobPlatformType = "jobkorea" | "wanted" | "saramin";
+
 export type CompanyType =
   | "SI"
   | "SM"
@@ -60,6 +62,7 @@ export interface CreateApplicationPayload {
   companyType: CompanyType; // 회사유형
   position: string; // 직무
   employmentType: EmploymentType; // 고용형태
+  projectName: string; // 프로젝트명
   workType: WorkType; // 근무형태
   jobPlatform: string; // 지원 플랫폼
   location?: string; // 지역

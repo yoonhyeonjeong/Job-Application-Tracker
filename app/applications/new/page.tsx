@@ -1,19 +1,36 @@
 "use client";
 
-import { Card, Col, DatePicker, Form, Input, Modal, Row, Select } from "antd";
+import {
+  Button,
+  Card,
+  Col,
+  DatePicker,
+  Form,
+  Input,
+  Modal,
+  Row,
+  Select,
+} from "antd";
 import type { ReactNode } from "react";
 import type { CreateApplicationPayload } from "@/types/application";
 import { PageHeader } from "@/components/common/PageHeader";
 import {
   companyTypeOptions,
   employmentTypeOptions,
+  jobPlatformOptions,
   statusOptions,
   workTypeOptions,
 } from "@/utils/format";
 
 const ApplicationsNewPage = (): ReactNode => {
   const [form] = Form.useForm<CreateApplicationPayload>();
-
+  // 프리랜서인지 여부 체크
+  const employmentType = Form.useWatch("employmentType", form);
+  const isFreelance = employmentType === "freelance";
+  const handleSubmit = (values: CreateApplicationPayload) => {
+    console.log(values);
+    const payload = values;
+  };
   return (
     <div className="page-stack">
       <PageHeader
@@ -22,7 +39,11 @@ const ApplicationsNewPage = (): ReactNode => {
       />
 
       <Card className="application-form-card">
-        <Form<CreateApplicationPayload> form={form} layout="vertical">
+        <Form<CreateApplicationPayload>
+          form={form}
+          layout="vertical"
+          onFinish={handleSubmit}
+        >
           <Form.Item
             name="companyName"
             label="회사명"
@@ -91,15 +112,21 @@ const ApplicationsNewPage = (): ReactNode => {
               </Form.Item>
             </Col>
           </Row>
-
+          {isFreelance && (
+            <Form.Item
+              name="projectName"
+              label="프로젝트명"
+              rules={[{ required: true, message: "프로젝트명을 입력하세요." }]}
+            >
+              <Input placeholder="프로젝트명을 입력" />
+            </Form.Item>
+          )}
           <Form.Item
             name="jobPlatform"
             label="지원 플랫폼"
-            rules={[
-              { required: true, message: "지원한 플랫폼을 입력해주세요." },
-            ]}
+            rules={[{ required: true, message: "플랫폼을 선택하세요." }]}
           >
-            <Input placeholder="https://..." />
+            <Select placeholder="플랫폼 선택" options={jobPlatformOptions} />
           </Form.Item>
 
           <Form.Item name="location" label="지역">
@@ -122,6 +149,9 @@ const ApplicationsNewPage = (): ReactNode => {
           <Form.Item name="memo" label="메모">
             <Input.TextArea rows={4} placeholder="메모를 입력하세요" />
           </Form.Item>
+          <Button type="primary" htmlType="submit" className="full-width">
+            지원 하러 가기
+          </Button>
         </Form>
       </Card>
     </div>

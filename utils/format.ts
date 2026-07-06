@@ -110,3 +110,18 @@ export const workTypeOptions = [
     label: "하이브리드",
   },
 ];
+
+export const jobPlatformOptions = [
+  {
+    value: "jobkorea",
+    label: "잡코리아",
+  },
+  {
+    value: "wanted",
+    label: "원티드",
+  },
+  {
+    value: "saramin",
+    label: "사람인",
+  },
+];

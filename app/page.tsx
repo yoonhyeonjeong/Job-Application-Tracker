@@ -31,9 +31,14 @@ const DashboardPage = () => {
             loading={loading}
           />
         </Col>
-        <Col xs={24} xl={8}>
-          <UpcomingSchedules schedules={upcomingSchedules} loading={loading} />
-        </Col>
+        {upcomingSchedules && (
+          <Col xs={24} xl={8}>
+            <UpcomingSchedules
+              schedules={upcomingSchedules}
+              loading={loading}
+            />
+          </Col>
+        )}
         <Col xs={24} xl={12}>
           <StatusOverview items={statusOverview} />
         </Col>
