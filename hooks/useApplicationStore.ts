@@ -1,17 +1,21 @@
-'use client';
+"use client";
 
-import { create } from 'zustand';
-import { fetchApplications, postApplication } from '@/services/applicationApi';
-import type { Application, ApplicationCreatePayload, ApplicationFilterParams } from '@/types/application';
+import { create } from "zustand";
+import { fetchApplications } from "@/services/applicationApi";
+import type {
+  ApplicationResponse,
+  ApplicationCreatePayload,
+  ApplicationFilterParams,
+} from "@/types/application";
 
 interface ApplicationStore {
-  applications: Application[];
+  applications: ApplicationResponse[];
   filters: ApplicationFilterParams;
   loading: boolean;
   error?: string;
   setFilters: (filters: ApplicationFilterParams) => void;
   loadApplications: () => Promise<void>;
-  addApplication: (payload: ApplicationCreatePayload) => Promise<void>;
+  addApplication?: (payload: ApplicationCreatePayload) => Promise<void>;
 }
 
 export const useApplicationStore = create<ApplicationStore>((set) => ({
@@ -19,6 +23,7 @@ export const useApplicationStore = create<ApplicationStore>((set) => ({
   filters: {},
   loading: false,
   setFilters: (filters) => set({ filters }),
+  // 지원목록 get
   loadApplications: async () => {
     set({ loading: true, error: undefined });
 
@@ -26,20 +31,21 @@ export const useApplicationStore = create<ApplicationStore>((set) => ({
       const applications = await fetchApplications();
       set({ applications, loading: false });
     } catch {
-      set({ error: '지원 목록을 불러오지 못했습니다.', loading: false });
+      set({ error: "지원 목록을 불러오지 못했습니다.", loading: false });
     }
   },
-  addApplication: async (payload) => {
-    set({ loading: true, error: undefined });
+  // 지원목록 post
+  // addApplication: async (payload) => {
+  //   set({ loading: true, error: undefined });
 
-    try {
-      const application = await postApplication(payload);
-      set((state) => ({
-        applications: [application, ...state.applications],
-        loading: false
-      }));
-    } catch {
-      set({ error: '지원 내역을 추가하지 못했습니다.', loading: false });
-    }
-  }
+  //   try {
+  //     const application = await postApplication(payload);
+  //     set((state) => ({
+  //       applications: [application, ...state.applications],
+  //       loading: false,
+  //     }));
+  //   } catch {
+  //     set({ error: "지원 내역을 추가하지 못했습니다.", loading: false });
+  //   }
+  // },
 }));

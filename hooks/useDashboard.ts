@@ -7,7 +7,7 @@ import {
   getStatusOverview,
   getUpcomingSchedules,
 } from "@/services/dashboardService";
-import type { Application } from "@/types/application";
+import type { ApplicationResponse } from "@/types/application";
 import type { DashboardSummary, StatusOverviewItem } from "@/types/dashboard";
 import type { Schedule } from "@/types/schedule";
 
@@ -15,9 +15,9 @@ export const useDashboard = () => {
   // 대시보드 정보
   const [summary, setSummary] = useState<DashboardSummary>();
   // 최근 지원 정보
-  const [recentApplications, setRecentApplications] = useState<Application[]>(
-    [],
-  );
+  const [recentApplications, setRecentApplications] = useState<
+    ApplicationResponse[]
+  >([]);
   // 다가오는 면접일정
   const [upcomingSchedules, setUpcomingSchedules] = useState<Schedule[]>([]);
   // 상태별 현황

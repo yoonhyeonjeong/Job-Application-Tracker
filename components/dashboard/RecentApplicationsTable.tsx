@@ -3,16 +3,16 @@ import { Card, Table, Tag } from "antd";
 import type { ColumnsType } from "antd/es/table";
 import type { ReactNode } from "react";
 import { StatusTag } from "@/components/common/StatusTag";
-import type { Application } from "@/types/application";
+import type { ApplicationResponse } from "@/types/application";
 import { companyTypeLabels } from "@/utils/format";
 import { useRouter } from "next/navigation";
 
 interface RecentApplicationsTableProps {
-  applications: Application[];
-  loading: boolean;
+  applications: ApplicationResponse[];
+  loading?: boolean;
 }
 
-const columns: ColumnsType<Application> = [
+const columns: ColumnsType<ApplicationResponse> = [
   {
     title: "회사",
     dataIndex: "companyName",
@@ -62,12 +62,15 @@ export const RecentApplicationsTable = ({
   const router = useRouter();
   return (
     <Card title="최근 지원 현황">
-      <Table<Application>
+      <Table<ApplicationResponse>
         rowKey="id"
         columns={columns}
         dataSource={applications}
         loading={loading}
-        pagination={false}
+        pagination={{
+          pageSize: 5, // 5개만 보여주기
+          showSizeChanger: false,
+        }}
         size="middle"
         onRow={(record) => ({
           onClick: () => {

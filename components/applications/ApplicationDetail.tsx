@@ -4,12 +4,12 @@ import { Card, Descriptions, Space, Typography } from "antd";
 import Link from "next/link";
 import type { ReactNode } from "react";
 import { StatusTag } from "@/components/common/StatusTag";
-import type { Application } from "@/types/application";
+import type { ApplicationResponse } from "@/types/application";
 import { formatDate } from "@/utils/date";
 import { employmentTypeLabels, workTypeLabels } from "@/utils/format";
 
 interface ApplicationDetailProps {
-  application: Application;
+  application: ApplicationResponse;
 }
 
 export const ApplicationDetail = ({
@@ -40,13 +40,10 @@ export const ApplicationDetail = ({
             {application.location ?? "-"}
           </Descriptions.Item>
           <Descriptions.Item label="지원일">
-            {formatDate(application.appliedAt)}
+            {application.appliedAt ? formatDate(application.appliedAt) : "-"}
           </Descriptions.Item>
           <Descriptions.Item label="마감일">
-            {formatDate(application.deadline)}
-          </Descriptions.Item>
-          <Descriptions.Item label="연봉 범위">
-            {application.salaryRange ?? "-"}
+            {application.deadline ? formatDate(application.deadline) : "-"}
           </Descriptions.Item>
           <Descriptions.Item label="메모" span={2}>
             {application.memo ?? "-"}

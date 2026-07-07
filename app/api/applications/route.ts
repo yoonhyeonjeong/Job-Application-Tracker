@@ -1,8 +1,11 @@
-import { NextResponse } from 'next/server';
-import { createApplication, getApplications } from '@/services/applicationService';
-import type { ApplicationCreatePayload } from '@/types/application';
+import { NextResponse } from "next/server";
+import {
+  createApplication,
+  getApplications,
+} from "@/services/applicationService";
+import type { ApplicationCreatePayload } from "@/types/application";
 
-export const dynamic = 'force-dynamic';
+export const dynamic = "force-dynamic";
 
 export const GET = async (): Promise<NextResponse> => {
   const applications = await getApplications();

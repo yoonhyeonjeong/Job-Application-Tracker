@@ -1,6 +1,6 @@
 import { getApplications } from "@/services/applicationService";
 import { schedulesMock } from "@/services/mock/schedules.mock";
-import type { Application } from "@/types/application";
+import type { ApplicationResponse } from "@/types/application";
 import type { DashboardSummary, StatusOverviewItem } from "@/types/dashboard";
 import type { Schedule } from "@/types/schedule";
 import { activeStatuses } from "@/utils/status";
@@ -23,7 +23,7 @@ export const getDashboardSummary = async (): Promise<DashboardSummary> => {
   };
 };
 
-export const getRecentApplications = async (): Promise<Application[]> => {
+export const getRecentApplications = async (): Promise<ApplicationResponse[]> => {
   const applications = await getApplications();
   return [...applications].slice(0, 5);
 };

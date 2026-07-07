@@ -1,4 +1,5 @@
 import type {
+  ApplicationStatus,
   CompanyType,
   EmploymentType,
   WorkType,
@@ -58,7 +59,7 @@ export const companyTypeOptions = [
   },
 ];
 
-export const statusOptions = [
+export const statusOptions: { value: ApplicationStatus; label: string }[] = [
   {
     value: "applied",
     label: "지원 완료",

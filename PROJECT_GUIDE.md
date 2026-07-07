@@ -132,30 +132,34 @@ error?: string;
 제공하는 액션:
 
 ```ts
-filteredApplications()
-setFilters(filters)
-loadApplications()
-addApplication(payload)
+filteredApplications();
+setFilters(filters);
+loadApplications();
+addApplication(payload);
 ```
 
 사용 예시:
 
 ```tsx
-'use client';
+"use client";
 
-import { useEffect } from 'react';
-import { useApplicationStore } from '@/hooks/useApplicationStore';
+import { useEffect } from "react";
+import { useApplicationStore } from "@/hooks/useApplicationStore";
 
 export const Example = () => {
-  const applications = useApplicationStore((state) => state.filteredApplications());
+  const applications = useApplicationStore((state) =>
+    state.filteredApplications(),
+  );
   const loading = useApplicationStore((state) => state.loading);
-  const loadApplications = useApplicationStore((state) => state.loadApplications);
+  const loadApplications = useApplicationStore(
+    (state) => state.loadApplications,
+  );
 
   useEffect(() => {
     void loadApplications();
   }, [loadApplications]);
 
-  return <div>{loading ? 'Loading...' : applications.length}</div>;
+  return <div>{loading ? "Loading..." : applications.length}</div>;
 };
 ```
 
@@ -165,11 +169,11 @@ export const Example = () => {
 const addApplication = useApplicationStore((state) => state.addApplication);
 
 await addApplication({
-  companyName: 'Example Company',
-  position: 'Frontend Developer',
-  status: 'applied',
-  employmentType: 'fullTime',
-  workType: 'hybrid'
+  companyName: "Example Company",
+  position: "Frontend Developer",
+  status: "applied",
+  employmentType: "fullTime",
+  workType: "hybrid",
 });
 ```
 
@@ -180,11 +184,11 @@ await addApplication({
 반환값:
 
 ```ts
-applications
-loading
-filters
-setFilters
-refresh
+applications;
+loading;
+filters;
+setFilters;
+refresh;
 ```
 
 `app/applications/page.tsx`는 이 hook으로 목록과 필터 상태를 가져옵니다.
@@ -216,11 +220,11 @@ Axios 인스턴스입니다.
 
 ```ts
 export const apiClient = axios.create({
-  baseURL: '/api',
+  baseURL: "/api",
   timeout: 8000,
   headers: {
-    'Content-Type': 'application/json'
-  }
+    "Content-Type": "application/json",
+  },
 });
 ```
 
@@ -231,8 +235,7 @@ export const apiClient = axios.create({
 Axios로 `/api/applications`를 호출하는 클라이언트 API 함수입니다.
 
 ```ts
-fetchApplications()
-postApplication(payload)
+fetchApplications();
 ```
 
 현재 사용 흐름:
@@ -268,10 +271,10 @@ API Route는 이 서비스를 호출합니다.
 제공 함수:
 
 ```ts
-getDashboardSummary()
-getRecentApplications()
-getUpcomingSchedules()
-getStatusOverview()
+getDashboardSummary();
+getRecentApplications();
+getUpcomingSchedules();
+getStatusOverview();
 ```
 
 ### mock
@@ -326,7 +329,7 @@ utils/
 ```ts
 statusLabels.applied; // '지원 완료'
 statusColors.interview; // 'gold'
-formatDate('2026-07-01'); // '2026.07.01'
+formatDate("2026-07-01"); // '2026.07.01'
 ```
 
 ## styles

@@ -1,8 +1,8 @@
-import type { Application } from "@/types/application";
+import type { ApplicationResponse } from "@/types/application";
 
-export const applicationsMock: Application[] = [
+export const applicationsMock: ApplicationResponse[] = [
   {
-    id: "app-1",
+    id: 1,
     companyName: "네이버 클라우드",
     position: "프론트엔드 개발자",
     status: "interview",
@@ -14,14 +14,10 @@ export const applicationsMock: Application[] = [
     appliedAt: "2026-06-12",
     deadline: "2026-07-05",
     nextAction: "면접 준비하기",
-    nextActionDate: "2026-07-03",
-    salaryRange: "Negotiable",
     memo: "React, TypeScript, dashboard experience emphasized.",
-    createdAt: "2026-06-12T09:00:00.000Z",
-    updatedAt: "2026-06-25T11:30:00.000Z",
   },
   {
-    id: "app-2",
+    id: 2,
     companyName: "Kakao Pay",
     position: "프론트엔드 개발자",
     status: "documentPassed",
@@ -33,13 +29,10 @@ export const applicationsMock: Application[] = [
     appliedAt: "2026-06-18",
     deadline: "2026-07-10",
     nextAction: "-",
-    nextActionDate: "2026-07-01",
     memo: "Fintech domain and design system experience match.",
-    createdAt: "2026-06-18T10:20:00.000Z",
-    updatedAt: "2026-06-22T08:40:00.000Z",
   },
   {
-    id: "app-3",
+    id: 3,
     companyName: "Line Plus",
     position: "프론트엔드 개발자",
     status: "applied",
@@ -50,13 +43,10 @@ export const applicationsMock: Application[] = [
     appliedAt: "2026-06-24",
     deadline: "2026-07-15",
     nextAction: "-",
-    nextActionDate: "2026-07-02",
     memo: "Platform team, performance optimization preferred.",
-    createdAt: "2026-06-24T12:10:00.000Z",
-    updatedAt: "2026-06-24T12:10:00.000Z",
   },
   {
-    id: "app-4",
+    id: 4,
     companyName: "토스",
     position: "프론트엔드 개발자",
     status: "offer",
@@ -67,14 +57,10 @@ export const applicationsMock: Application[] = [
     location: "Seoul",
     appliedAt: "2026-05-29",
     nextAction: "제안 조건 검토하기",
-    nextActionDate: "2026-07-04",
-    salaryRange: "Open",
     memo: "Need compare benefits and growth track.",
-    createdAt: "2026-05-29T07:30:00.000Z",
-    updatedAt: "2026-06-28T13:15:00.000Z",
   },
   {
-    id: "app-5",
+    id: 5,
     companyName: "Coupang",
     position: "프론트엔드 개발자",
     status: "rejected",
@@ -85,7 +71,5 @@ export const applicationsMock: Application[] = [
     location: "Seoul",
     appliedAt: "2026-05-15",
     memo: "Rejected after final interview. Improve system design answers.",
-    createdAt: "2026-05-15T02:20:00.000Z",
-    updatedAt: "2026-06-20T03:10:00.000Z",
   },
 ];

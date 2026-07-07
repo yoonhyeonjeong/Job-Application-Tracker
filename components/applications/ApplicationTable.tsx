@@ -5,16 +5,16 @@ import type { ColumnsType } from "antd/es/table";
 import Link from "next/link";
 import type { ReactNode } from "react";
 import { StatusTag } from "@/components/common/StatusTag";
-import type { Application } from "@/types/application";
+import type { ApplicationResponse } from "@/types/application";
 import { formatDate } from "@/utils/date";
 import { companyTypeLabels, employmentTypeLabels } from "@/utils/format";
 
 interface ApplicationTableProps {
-  applications: Application[];
+  applications: ApplicationResponse[];
   loading: boolean;
 }
 
-const columns: ColumnsType<Application> = [
+const columns: ColumnsType<ApplicationResponse> = [
   {
     title: "회사",
     dataIndex: "companyName",
@@ -80,7 +80,7 @@ export const ApplicationTable = ({
   loading,
 }: ApplicationTableProps): ReactNode => {
   return (
-    <Table<Application>
+    <Table<ApplicationResponse>
       rowKey="id"
       columns={columns}
       dataSource={applications}

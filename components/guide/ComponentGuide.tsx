@@ -19,7 +19,7 @@ const summary: DashboardSummary = {
   totalCount: applicationsMock.length,
   activeCount: applicationsMock.filter((application) => application.status !== 'rejected').length,
   interviewCount: schedulesMock.filter((schedule) => schedule.type === 'interview').length,
-  waitingCount: applicationsMock.filter((application) => application.status === 'screening').length
+  waitingCount: applicationsMock.filter((application) => application.status === 'applied').length
 };
 
 const statusOverview: StatusOverviewItem[] = applicationsMock.reduce<StatusOverviewItem[]>((items, application) => {
@@ -34,7 +34,7 @@ const statusOverview: StatusOverviewItem[] = applicationsMock.reduce<StatusOverv
   return [...items, { status: application.status, count: 1 }];
 }, []);
 
-const statuses: ApplicationStatus[] = ['applied', 'screening', 'interview', 'offer', 'rejected', 'onHold'];
+const statuses: ApplicationStatus[] = ['applied', 'documentPassed', 'interview', 'offer', 'rejected'];
 
 export const ComponentGuide = (): ReactNode => {
   const [filters, setFilters] = useState<ApplicationFilterParams>({});
