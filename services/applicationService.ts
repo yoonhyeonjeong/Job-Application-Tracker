@@ -49,13 +49,6 @@ export const getApplications = async (
   });
 };
 
-export const getApplicationById = async (
-  id: string,
-): Promise<ApplicationResponse | undefined> => {
-  await delay();
-  return applications.find((application) => application.id === Number(id));
-};
-
 export const createApplication = async (
   payload: ApplicationCreatePayload,
 ): Promise<ApplicationResponse> => {

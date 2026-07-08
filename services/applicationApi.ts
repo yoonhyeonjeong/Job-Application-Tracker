@@ -6,3 +6,13 @@ export const fetchApplications = async (): Promise<ApplicationResponse[]> => {
 
   return response.data;
 };
+
+export const fetchDetailApplication = async (
+  id: number,
+): Promise<ApplicationResponse> => {
+  const response = await apiClient.get<ApplicationResponse>(
+    `/applications/${id}`,
+  );
+
+  return response.data;
+};

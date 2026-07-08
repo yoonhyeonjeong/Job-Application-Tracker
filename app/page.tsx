@@ -40,10 +40,12 @@ const DashboardPage = () => {
       setLoading(false);
     }
   }, []);
+
   useEffect(() => {
     getFetchData();
   }, [getFetchData]);
-  //  summary data
+
+  //  summary data (백에서 처리할것)
   const summaryData = {
     totalCount: recentData.length, // 총 지원 건수
     appliedCount: recentData.filter((data) => data.status === "applied").length, // 지원 완료

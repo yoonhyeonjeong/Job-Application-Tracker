@@ -12,9 +12,9 @@ export const employmentTypeLabels: Record<EmploymentType, string> = {
 };
 
 export const workTypeLabels: Record<WorkType, string> = {
-  onsite: "출근",
+  onsite: "상주",
   remote: "원격",
-  hybrid: "하이브리드",
+  hybrid: "상주 + 원격",
 };
 
 export const companyTypeLabels: Record<CompanyType, string> = {

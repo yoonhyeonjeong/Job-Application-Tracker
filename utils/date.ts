@@ -21,3 +21,9 @@ export const getDday = (date: string) => {
   const diff = dayjs(date).startOf("day").diff(dayjs().startOf("day"), "day");
   return diff;
 };
+
+// 경과일 계산: 해당 날짜로부터 며칠 지났는지
+export const getDaysSince = (date: string) => {
+  const diff = dayjs().startOf("day").diff(dayjs(date).startOf("day"), "day");
+  return diff;
+};
