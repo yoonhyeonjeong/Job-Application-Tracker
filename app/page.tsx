@@ -13,12 +13,12 @@ import { fetchApplications } from "@/services/applicationApi";
 import { ApplicationResponse } from "@/types/application";
 import { Schedule } from "@/types/schedule";
 import { statusOptions } from "@/utils/format";
+import { useApplications } from "@/hooks/useApplications";
+import { useApplicationStore } from "@/hooks/useApplicationStore";
 
 const DashboardPage = () => {
   // 최근 지원 data
-  const [recentData, setRecentData] = useState<ApplicationResponse[]>([]);
-  const [loading, setLoading] = useState<boolean>(false);
-
+  const { applications, loadApplications, loading } = useApplicationStore();
   const {
     summary,
     // recentApplications,
@@ -27,32 +27,19 @@ const DashboardPage = () => {
     // loading,
   } = useDashboard();
 
-  // 전체 data 호출
-  const getFetchData = useCallback(async () => {
-    setLoading(true);
-
-    try {
-      const data = await fetchApplications();
-      setRecentData(data);
-    } catch (error) {
-      console.error(error);
-    } finally {
-      setLoading(false);
-    }
-  }, []);
-
   useEffect(() => {
-    getFetchData();
-  }, [getFetchData]);
+    loadApplications();
+  }, [loadApplications]);
 
   //  summary data (백에서 처리할것)
   const summaryData = {
-    totalCount: recentData.length, // 총 지원 건수
-    appliedCount: recentData.filter((data) => data.status === "applied").length, // 지원 완료
-    documentPassedCount: recentData.filter(
+    totalCount: applications.length, // 총 지원 건수
+    appliedCount: applications.filter((data) => data.status === "applied")
+      .length, // 지원 완료
+    documentPassedCount: applications.filter(
       (data) => data.status === "documentPassed",
     ).length, // 서류 통과
-    interviewCount: recentData.filter((data) => data.status === "interview")
+    interviewCount: applications.filter((data) => data.status === "interview")
       .length, // 면접 예정
   };
 
@@ -60,7 +47,7 @@ const DashboardPage = () => {
   const statusOverview = statusOptions.map((item, i) => {
     return {
       status: item.value,
-      count: recentData.filter((data) => data.status === item.value).length,
+      count: applications.filter((data) => data.status === item.value).length,
     };
   });
 
@@ -106,7 +93,7 @@ const DashboardPage = () => {
       <Row gutter={[16, 16]}>
         <Col xs={24} xl={16}>
           <RecentApplicationsTable
-            applications={recentData}
+            applications={applications}
             loading={loading}
           />
         </Col>

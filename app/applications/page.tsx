@@ -12,7 +12,6 @@ import { useRouter } from "next/navigation";
 
 const ApplicationsPage = (): ReactNode => {
   const { applications, loading, filters, setFilters } = useApplications();
-  const addApplication = useApplicationStore((state) => state.addApplication);
   const error = useApplicationStore((state) => state.error);
   const [messageApi, contextHolder] = message.useMessage();
 

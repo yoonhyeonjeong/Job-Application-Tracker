@@ -36,7 +36,7 @@ const ApplicationDetailPage = () => {
   if (loading || !detailData) {
     return <Skeleton active paragraph={{ rows: 2 }} />;
   }
-  console.log(detailData);
+
   return (
     <div className="page-stack">
       <PageHeader

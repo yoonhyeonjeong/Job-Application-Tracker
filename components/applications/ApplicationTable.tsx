@@ -86,6 +86,11 @@ export const ApplicationTable = ({
       dataSource={applications}
       loading={loading}
       scroll={{ x: 1000 }}
+      pagination={{
+        pageSize: 5, // 5개만 보여주기
+        showSizeChanger: false,
+      }}
+      size="middle"
     />
   );
 };
