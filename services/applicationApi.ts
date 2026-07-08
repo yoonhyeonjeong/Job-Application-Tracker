@@ -1,5 +1,14 @@
 import { apiClient } from "@/services/apiClient";
-import type { ApplicationResponse } from "@/types/application";
+import type {
+  ApplicationResponse,
+  CreateApplicationPayload,
+} from "@/types/application";
+
+export const postApplication = async (
+  payload: CreateApplicationPayload,
+): Promise<void> => {
+  await apiClient.post("/applications", payload);
+};
 
 export const fetchApplications = async (): Promise<ApplicationResponse[]> => {
   const response = await apiClient.get<ApplicationResponse[]>("/applications");

@@ -7,11 +7,12 @@ import {
   DatePicker,
   Form,
   Input,
+  message,
   Modal,
   Row,
   Select,
 } from "antd";
-import type { ReactNode } from "react";
+import { useState, type ReactNode } from "react";
 import type { CreateApplicationPayload } from "@/types/application";
 import { PageHeader } from "@/components/common/PageHeader";
 import {
@@ -21,16 +22,32 @@ import {
   statusOptions,
   workTypeOptions,
 } from "@/utils/format";
+import { postApplication } from "@/services/applicationApi";
+import { useRouter } from "next/navigation";
 
 const ApplicationsNewPage = (): ReactNode => {
+  const router = useRouter();
+  const [loading, setLoading] = useState<boolean>(false);
   const [form] = Form.useForm<CreateApplicationPayload>();
   // 프리랜서인지 여부 체크
   const employmentType = Form.useWatch("employmentType", form);
   const isFreelance = employmentType === "freelance";
-  const handleSubmit = (values: CreateApplicationPayload) => {
-    console.log(values);
-    const payload = values;
+
+  const handleSubmit = async (values: CreateApplicationPayload) => {
+    setLoading(true);
+    try {
+      console.log(values);
+      await postApplication(values);
+      message.success("지원 정보가 등록되었습니다.");
+      router.push("/");
+    } catch (error) {
+      console.error(error);
+      message.success("지원 정보 등록 실패했습니다.");
+    } finally {
+      setLoading(false);
+    }
   };
+
   return (
     <div className="page-stack">
       <PageHeader
