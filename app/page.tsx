@@ -5,31 +5,35 @@ import { PageHeader } from "@/components/common/PageHeader";
 import { RecentApplicationsTable } from "@/components/dashboard/RecentApplicationsTable";
 import { StatusOverview } from "@/components/dashboard/StatusOverview";
 import { SummaryCards } from "@/components/dashboard/SummaryCards";
-import { UpcomingSchedules } from "@/components/dashboard/UpcomingSchedules";
-import { useDashboard } from "@/hooks/useDashboard";
 import { MonthlyOverview } from "@/components/dashboard/MonthlyOverview";
 import { useCallback, useEffect, useState } from "react";
-import { fetchApplications } from "@/services/applicationApi";
-import { ApplicationResponse } from "@/types/application";
 import { Schedule } from "@/types/schedule";
 import { statusOptions } from "@/utils/format";
-import { useApplications } from "@/hooks/useApplications";
 import { useApplicationStore } from "@/hooks/useApplicationStore";
+import { fetchUpcomingSchedules } from "@/services/scheduleApi";
+import { UpcomingSchedules } from "@/components/dashboard/UpcomingSchedules";
 
 const DashboardPage = () => {
-  // 최근 지원 data
+  const [scheduleLoading, setScheduleLoading] = useState<boolean>(false);
+  // 지원목록 store
   const { applications, loadApplications, loading } = useApplicationStore();
-  const {
-    summary,
-    // recentApplications,
-    upcomingSchedules,
-    // statusOverview,
-    // loading,
-  } = useDashboard();
+  // 다가오는 일정
+  const [scheduleData, SetScheduleData] = useState<Schedule[]>([]);
+
+  const fetchSchedules = useCallback(async () => {
+    try {
+      const data = await fetchUpcomingSchedules();
+      SetScheduleData(data);
+    } catch (error) {
+      console.error(error);
+    } finally {
+    }
+  }, []);
 
   useEffect(() => {
     loadApplications();
-  }, [loadApplications]);
+    fetchSchedules();
+  }, [loadApplications, fetchSchedules]);
 
   //  summary data (백에서 처리할것)
   const summaryData = {
@@ -51,38 +55,6 @@ const DashboardPage = () => {
     };
   });
 
-  const schedulesMock: Schedule[] = [
-    {
-      id: "schedule-1",
-      applicationId: "app-1",
-      type: "interview",
-      title: "모카 소프트",
-      scheduledAt: "2026-07-10T14:00:00.000Z",
-      description: "React architecture and performance discussion",
-    },
-    {
-      id: "schedule-2",
-      applicationId: "app-2",
-      type: "deadline",
-      title: "모카 소프트",
-      scheduledAt: "2026-07-11T01:00:00.000Z",
-    },
-    {
-      id: "schedule-3",
-      applicationId: "app-3",
-      type: "deadline",
-      title: "카카오페이",
-      scheduledAt: "2026-07-12T09:00:00.000Z",
-    },
-    {
-      id: "schedule-4",
-      applicationId: "app-4",
-      type: "assignment",
-      title: "토스",
-      scheduledAt: "2026-07-06T14:00:00.000Z",
-    },
-  ];
-
   return (
     <div className="page-stack">
       <PageHeader
@@ -98,9 +70,12 @@ const DashboardPage = () => {
           />
         </Col>
         {/* 다가오는일정 */}
-        {/* <Col xs={24} xl={8}>
-          <UpcomingSchedules schedules={upcomingSchedules} loading={loading} />
-        </Col> */}
+        <Col xs={24} xl={8}>
+          <UpcomingSchedules
+            schedules={scheduleData}
+            loading={scheduleLoading}
+          />
+        </Col>
         <Col xs={24} xl={12}>
           <StatusOverview items={statusOverview} />
         </Col>
