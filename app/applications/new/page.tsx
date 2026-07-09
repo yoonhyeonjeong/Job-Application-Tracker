@@ -24,6 +24,7 @@ import {
 } from "@/utils/format";
 import { postApplication } from "@/services/applicationApi";
 import { useRouter } from "next/navigation";
+import dayjs from "dayjs";
 
 const ApplicationsNewPage = (): ReactNode => {
   const router = useRouter();
@@ -36,8 +37,14 @@ const ApplicationsNewPage = (): ReactNode => {
   const handleSubmit = async (values: CreateApplicationPayload) => {
     setLoading(true);
     try {
-      console.log(values);
-      await postApplication(values);
+      const payload = {
+        ...values,
+        appliedAt: dayjs(values.appliedAt).format("YYYY-MM-DD"),
+        deadline: dayjs(values.deadline).format("YYYY-MM-DD"),
+        nextAction: values.nextAction?.trim(),
+        memo: values.memo?.trim(),
+      };
+      await postApplication(payload);
       message.success("지원 정보가 등록되었습니다.");
       router.push("/");
     } catch (error) {
@@ -162,7 +169,9 @@ const ApplicationsNewPage = (): ReactNode => {
               </Form.Item>
             </Col>
           </Row>
-
+          <Form.Item name="nextAction" label="해야할 일">
+            <Input.TextArea rows={4} placeholder="해야할 일을 입력하세요" />
+          </Form.Item>
           <Form.Item name="memo" label="메모">
             <Input.TextArea rows={4} placeholder="메모를 입력하세요" />
           </Form.Item>
