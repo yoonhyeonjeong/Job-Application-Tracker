@@ -1,7 +1,9 @@
 import { apiClient } from "@/services/apiClient";
-import { Schedule } from "@/types/schedule";
+import { ScheduleResponse } from "@/types/schedule";
 
-export const fetchUpcomingSchedules = async (): Promise<Schedule[]> => {
-  const response = await apiClient.get<Schedule[]>("/schedules/upcoming");
+export const fetchUpcomingSchedules = async (): Promise<ScheduleResponse[]> => {
+  const response = await apiClient.get<ScheduleResponse[]>(
+    "/schedules/upcoming",
+  );
   return response.data;
 };

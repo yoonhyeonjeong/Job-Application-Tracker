@@ -7,7 +7,7 @@ import { StatusOverview } from "@/components/dashboard/StatusOverview";
 import { SummaryCards } from "@/components/dashboard/SummaryCards";
 import { MonthlyOverview } from "@/components/dashboard/MonthlyOverview";
 import { useCallback, useEffect, useState } from "react";
-import { Schedule } from "@/types/schedule";
+import { ScheduleResponse } from "@/types/schedule";
 import { useApplicationStore } from "@/hooks/useApplicationStore";
 import { fetchUpcomingSchedules } from "@/services/scheduleApi";
 import { UpcomingSchedules } from "@/components/dashboard/UpcomingSchedules";
@@ -19,7 +19,7 @@ const DashboardPage = () => {
   // 지원목록 store
   const { applications, loadApplications, loading } = useApplicationStore();
   // 다가오는 일정
-  const [scheduleData, SetScheduleData] = useState<Schedule[]>([]);
+  const [scheduleData, SetScheduleData] = useState<ScheduleResponse[]>([]);
   // 대시보드
   const [dashboardData, setDashboardData] = useState<DashboardResponse>();
   const fetchSchedules = useCallback(async () => {

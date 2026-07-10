@@ -1,10 +1,10 @@
 export type ScheduleType = "interview" | "assignment" | "deadline";
 
-export interface Schedule {
+export interface ScheduleResponse {
   id: number;
   applicationId: number;
   type: ScheduleType;
   title: string;
-  scheduledDate: string;
+  scheduledAt: string;
   memo?: string;
 }
