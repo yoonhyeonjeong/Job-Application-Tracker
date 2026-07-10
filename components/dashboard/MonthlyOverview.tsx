@@ -2,11 +2,11 @@
 
 import { Card, Space } from "antd";
 import type { ReactNode } from "react";
-import type { StatusOverviewItem } from "@/types/dashboard";
+import type { MonthlyCount } from "@/types/dashboard";
 import { MonthlyChart } from "./MonthlyChart";
 
 interface MonthlyOverviewProps {
-  items: StatusOverviewItem[];
+  items: MonthlyCount[];
 }
 
 export const MonthlyOverview = ({ items }: MonthlyOverviewProps): ReactNode => {

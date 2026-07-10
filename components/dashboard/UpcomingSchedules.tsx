@@ -1,4 +1,4 @@
-import { Card, Flex, List, Space, Tag, Typography } from "antd";
+import { Card, Flex, List, Skeleton, Space, Tag, Typography } from "antd";
 import type { ReactNode } from "react";
 import type { Schedule } from "@/types/schedule";
 import { formatDateTime, getDayLabel, getDday } from "@/utils/date";
@@ -16,6 +16,9 @@ export const UpcomingSchedules = ({
   schedules,
   loading,
 }: UpcomingSchedulesProps): ReactNode => {
+  if (loading || !schedules) {
+    return <Skeleton active paragraph={{ rows: 2 }} />;
+  }
   // 오름차순 정렬 + 3개만
   const schedulesData = [...schedules]
     .filter((schedule) => getDday(schedule.scheduledDate) >= 0)

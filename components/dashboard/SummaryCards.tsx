@@ -35,18 +35,9 @@ export const SummaryCards = ({
       <Col xs={24} sm={12} xl={6}>
         <Card>
           <Statistic
-            title="지원완료"
-            value={summary.appliedCount}
+            title="진행중"
+            value={summary.inProgressCount}
             prefix={<ClockCircleOutlined />}
-          />
-        </Card>
-      </Col>
-      <Col xs={24} sm={12} xl={6}>
-        <Card>
-          <Statistic
-            title="서류통과"
-            value={summary.documentPassedCount}
-            prefix={<CheckCircleOutlined />}
           />
         </Card>
       </Col>
@@ -55,6 +46,15 @@ export const SummaryCards = ({
           <Statistic
             title="면접예정"
             value={summary.interviewCount}
+            prefix={<CheckCircleOutlined />}
+          />
+        </Card>
+      </Col>
+      <Col xs={24} sm={12} xl={6}>
+        <Card>
+          <Statistic
+            title="오퍼"
+            value={summary.offerCount}
             prefix={<CalendarOutlined />}
           />
         </Card>

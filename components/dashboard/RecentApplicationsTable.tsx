@@ -1,5 +1,5 @@
 "use client";
-import { Card, Table, Tag } from "antd";
+import { Card, Skeleton, Table, Tag } from "antd";
 import type { ColumnsType } from "antd/es/table";
 import type { ReactNode } from "react";
 import { StatusTag } from "@/components/common/StatusTag";
@@ -60,6 +60,9 @@ export const RecentApplicationsTable = ({
   loading,
 }: RecentApplicationsTableProps): ReactNode => {
   const router = useRouter();
+  if (loading || !applications) {
+    return <Skeleton active paragraph={{ rows: 2 }} />;
+  }
   return (
     <Card title="최근 지원 현황">
       <Table<ApplicationResponse>

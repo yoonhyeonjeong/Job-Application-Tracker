@@ -8,10 +8,11 @@ import { SummaryCards } from "@/components/dashboard/SummaryCards";
 import { MonthlyOverview } from "@/components/dashboard/MonthlyOverview";
 import { useCallback, useEffect, useState } from "react";
 import { Schedule } from "@/types/schedule";
-import { statusOptions } from "@/utils/format";
 import { useApplicationStore } from "@/hooks/useApplicationStore";
 import { fetchUpcomingSchedules } from "@/services/scheduleApi";
 import { UpcomingSchedules } from "@/components/dashboard/UpcomingSchedules";
+import { fetchDashboard } from "@/services/dashboardApi";
+import { DashboardResponse } from "@/types/dashboard";
 
 const DashboardPage = () => {
   const [scheduleLoading, setScheduleLoading] = useState<boolean>(false);
@@ -19,7 +20,8 @@ const DashboardPage = () => {
   const { applications, loadApplications, loading } = useApplicationStore();
   // 다가오는 일정
   const [scheduleData, SetScheduleData] = useState<Schedule[]>([]);
-
+  // 대시보드
+  const [dashboardData, setDashboardData] = useState<DashboardResponse>();
   const fetchSchedules = useCallback(async () => {
     try {
       const data = await fetchUpcomingSchedules();
@@ -30,30 +32,30 @@ const DashboardPage = () => {
     }
   }, []);
 
+  // 대시보드 호출
+  const loadDashboard = useCallback(async () => {
+    try {
+      const data = await fetchDashboard();
+      setDashboardData(data);
+    } catch (error) {
+      console.error(error);
+    } finally {
+    }
+  }, []);
+
   useEffect(() => {
     loadApplications();
     fetchSchedules();
-  }, [loadApplications, fetchSchedules]);
+    loadDashboard();
+  }, [loadApplications, fetchSchedules, loadDashboard]);
 
-  //  summary data (백에서 처리할것)
+  // 대시보드 카드
   const summaryData = {
-    totalCount: applications.length, // 총 지원 건수
-    appliedCount: applications.filter((data) => data.status === "applied")
-      .length, // 지원 완료
-    documentPassedCount: applications.filter(
-      (data) => data.status === "documentPassed",
-    ).length, // 서류 통과
-    interviewCount: applications.filter((data) => data.status === "interview")
-      .length, // 면접 예정
+    totalCount: dashboardData?.summary.totalCount ?? 0, // 총 지원 건수
+    inProgressCount: dashboardData?.summary.inProgressCount ?? 0, // 진행중 건수
+    interviewCount: dashboardData?.summary.interviewCount ?? 0, // 면접 건수
+    offerCount: dashboardData?.summary.offerCount ?? 0, // 오퍼 건수
   };
-
-  // 지원현황
-  const statusOverview = statusOptions.map((item, i) => {
-    return {
-      status: item.value,
-      count: applications.filter((data) => data.status === item.value).length,
-    };
-  });
 
   return (
     <div className="page-stack">
@@ -77,11 +79,11 @@ const DashboardPage = () => {
           />
         </Col>
         <Col xs={24} xl={12}>
-          <StatusOverview items={statusOverview} />
+          <StatusOverview items={dashboardData?.statusCounts ?? []} />
         </Col>
-        {/* <Col xs={24} xl={12}>
-          <MonthlyOverview items={statusOverview} />
-        </Col> */}
+        <Col xs={24} xl={12}>
+          <MonthlyOverview items={dashboardData?.monthlyCounts ?? []} />
+        </Col>
       </Row>
     </div>
   );
