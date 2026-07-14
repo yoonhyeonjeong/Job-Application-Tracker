@@ -56,7 +56,7 @@ export const UpcomingSchedules = ({
                 </Flex>
                 <Flex vertical gap={4} align="start">
                   <Tag color={isToday ? "red" : ""}>
-                    {scheduleTypeLabels[schedule.type]}{" "}
+                    {scheduleTypeLabels[schedule.scheduleType]}{" "}
                     {isDueSoon && (
                       <span>D-{getDday(schedule.scheduledAt)}</span>
                     )}

@@ -1,5 +1,6 @@
 // import 'antd/dist/reset.css';
 import "@/styles/globals.scss";
+import "@ant-design/v5-patch-for-react-19";
 import type { Metadata } from "next";
 import type { ReactNode } from "react";
 import { AppLayout } from "@/components/common/AppLayout";

@@ -4,6 +4,7 @@ import type {
   EmploymentType,
   WorkType,
 } from "@/types/application";
+import { ScheduleType } from "@/types/schedule";
 
 export const employmentTypeLabels: Record<EmploymentType, string> = {
   fullTime: "정규직",
@@ -124,5 +125,16 @@ export const jobPlatformOptions = [
   {
     value: "saramin",
     label: "사람인",
+  },
+];
+
+export const ScheduleOption: { value: ScheduleType; label: string }[] = [
+  {
+    value: "interview",
+    label: "면접",
+  },
+  {
+    value: "assignment",
+    label: "과제",
   },
 ];
