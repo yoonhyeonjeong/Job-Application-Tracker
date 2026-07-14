@@ -61,6 +61,9 @@ export const UpcomingSchedules = ({
                       <span>D-{getDday(schedule.scheduledAt)}</span>
                     )}
                   </Tag>
+                  <Typography.Text strong>
+                    {schedule.companyName}
+                  </Typography.Text>
                   <Typography.Text strong>{schedule.title}</Typography.Text>
                   <Typography.Text type="secondary">
                     <ClockCircleOutlined />{" "}

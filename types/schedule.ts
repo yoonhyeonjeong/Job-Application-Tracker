@@ -5,6 +5,7 @@ export interface ScheduleResponse {
   applicationId: number;
   type: ScheduleType;
   title: string;
+  companyName: string;
   scheduledAt: string;
   memo?: string;
 }
