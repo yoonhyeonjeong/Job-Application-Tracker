@@ -5,8 +5,13 @@ import { useCallback, useEffect, useState, type ReactNode } from "react";
 import { ApplicationDetail } from "@/components/applications/ApplicationDetail";
 import { PageHeader } from "@/components/common/PageHeader";
 import { ApplicationResponse } from "@/types/application";
-import { fetchDetailApplication } from "@/services/applicationApi";
+import {
+  fetchDetailApplication,
+  fetchDetailSchedule,
+} from "@/services/applicationApi";
 import { Skeleton } from "antd";
+import { ScheduleCard } from "@/components/schedule/ScheduleCard";
+import { ScheduleResponse } from "@/types/schedule";
 
 const ApplicationDetailPage = () => {
   const params = useParams();
@@ -16,6 +21,9 @@ const ApplicationDetailPage = () => {
   const [detailData, setDetailData] = useState<ApplicationResponse | null>(
     null,
   );
+  const [detailScheduleData, setDetailScheduleData] = useState<
+    ScheduleResponse[]
+  >([]);
 
   const getFetchDetailData = useCallback(async () => {
     setLoading(true);
@@ -29,9 +37,22 @@ const ApplicationDetailPage = () => {
     }
   }, []);
 
+  const getFetchDetailScheduleData = useCallback(async () => {
+    setLoading(true);
+    try {
+      const data = await fetchDetailSchedule(Number(id));
+      setDetailScheduleData(data);
+    } catch (error) {
+      console.error(error);
+    } finally {
+      setLoading(false);
+    }
+  }, []);
+
   useEffect(() => {
     getFetchDetailData();
-  }, [getFetchDetailData]);
+    getFetchDetailScheduleData();
+  }, [getFetchDetailData, getFetchDetailScheduleData]);
 
   if (loading || !detailData) {
     return <Skeleton active paragraph={{ rows: 2 }} />;
@@ -45,6 +66,7 @@ const ApplicationDetailPage = () => {
       />
 
       <ApplicationDetail application={detailData} />
+      <ScheduleCard data={detailScheduleData} />
     </div>
   );
 };
