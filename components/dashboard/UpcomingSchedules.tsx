@@ -11,7 +11,6 @@ interface UpcomingSchedulesProps {
   loading: boolean;
 }
 
-// 일정 순서 오름차순
 export const UpcomingSchedules = ({
   schedules,
   loading,
@@ -28,7 +27,7 @@ export const UpcomingSchedules = ({
         dataSource={schedulesData}
         renderItem={(schedule) => {
           const ddayDiff = getDday(schedule.scheduledAt);
-          const isDueSoon = ddayDiff > 0 && ddayDiff <= 7;
+          const isDueSoon = ddayDiff > 0 && ddayDiff <= 30;
           const isToday = ddayDiff === 0;
 
           return (
