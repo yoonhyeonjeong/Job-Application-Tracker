@@ -12,6 +12,7 @@ import {
 import { Col, Row, Skeleton, Typography } from "antd";
 import { ScheduleCard } from "@/components/schedule/ScheduleCard";
 import { ScheduleDetailResponse } from "@/types/schedule";
+import ScheduleDetailModal from "@/components/applications/ScheduleDetailModal";
 
 const ApplicationDetailPage = () => {
   const params = useParams();
@@ -24,6 +25,9 @@ const ApplicationDetailPage = () => {
   const [detailScheduleData, setDetailScheduleData] = useState<
     ScheduleDetailResponse[]
   >([]);
+  const [detailModalOpen, setDetailModalOpen] = useState<boolean>(false);
+  const [selectedSchedule, SetSelectedSchedule] =
+    useState<ScheduleDetailResponse | null>(null);
 
   const getFetchDetailData = useCallback(async () => {
     setLoading(true);
@@ -35,7 +39,7 @@ const ApplicationDetailPage = () => {
     } finally {
       setLoading(false);
     }
-  }, []);
+  }, [id]);
 
   const getFetchDetailScheduleData = useCallback(async () => {
     setLoading(true);
@@ -47,8 +51,21 @@ const ApplicationDetailPage = () => {
     } finally {
       setLoading(false);
     }
-  }, []);
+  }, [id]);
 
+  const handleOpenScheduleDetail = (v: ScheduleDetailResponse) => {
+    setDetailModalOpen(true);
+    SetSelectedSchedule(v);
+  };
+
+  const handleCloseScheduleDetail = () => {
+    setDetailModalOpen(false);
+  };
+
+  const handleScheduleUpdated = async () => {
+    await getFetchDetailScheduleData();
+    handleCloseScheduleDetail();
+  };
   useEffect(() => {
     getFetchDetailData();
     getFetchDetailScheduleData();
@@ -74,11 +91,25 @@ const ApplicationDetailPage = () => {
           <Row gutter={[20, 20]}>
             {detailScheduleData.map((v) => (
               <Col key={`scheduleData-${v.id}`} xs={24} sm={12} lg={8}>
-                <ScheduleCard data={v} />
+                <ScheduleCard
+                  data={v}
+                  onClick={() => {
+                    handleOpenScheduleDetail(v);
+                  }}
+                />
               </Col>
             ))}
           </Row>
         </div>
+      )}
+
+      {detailModalOpen && selectedSchedule && (
+        <ScheduleDetailModal
+          schedule={selectedSchedule}
+          open={detailModalOpen}
+          onCancel={handleCloseScheduleDetail}
+          onSuccess={handleScheduleUpdated}
+        />
       )}
     </div>
   );

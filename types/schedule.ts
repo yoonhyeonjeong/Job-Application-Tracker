@@ -8,6 +8,13 @@ export interface SchedulePayload {
   memo?: string;
 }
 
+export interface UpdateSchedulePayload {
+  scheduleType?: ScheduleType;
+  title?: string;
+  scheduledAt?: string;
+  memo?: string;
+}
+
 export interface ScheduleResponse {
   id: number;
   applicationId: number;
@@ -21,7 +28,7 @@ export interface ScheduleResponse {
 export interface ScheduleDetailResponse {
   id: number;
   applicationId: number;
-  type: string;
+  type: ScheduleType;
   title: string;
   scheduledAt: string;
   memo?: string;
