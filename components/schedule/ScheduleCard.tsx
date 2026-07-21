@@ -1,32 +1,25 @@
 "use client";
 
-import { Button, Card, Flex, Space, Typography } from "antd";
-import { useState, type ReactNode } from "react";
-import { useParams } from "next/navigation";
-import { ScheduleResponse } from "@/types/schedule";
+import { Card, Flex, Space, Tag, Typography } from "antd";
+import { type ReactNode } from "react";
+import { ScheduleDetailResponse } from "@/types/schedule";
+import dayjs from "dayjs";
 
 interface ScheduleCardProps {
-  data: ScheduleResponse[];
+  data: ScheduleDetailResponse;
 }
 
 export const ScheduleCard = ({ data }: ScheduleCardProps): ReactNode => {
-  const params = useParams();
-  // const id = Number(params.id);
-  console.log(data, "sdfsdf");
-
+  const ScheduleTypeLabel = data?.type === "interview" ? "면접" : "과제";
   return (
     <>
       <Card>
         <Space direction="vertical" size="large" className="full-width">
           <Space direction="vertical" size={4} className="full-width">
-            <Flex align="center" justify="space-between">
-              <Typography.Title level={3}>xxc</Typography.Title>
-            </Flex>
-
-            <Flex align="center" gap={8}>
-              <Typography.Text type="secondary">sdfsfd</Typography.Text>
-              <Typography.Text type="warning">sdfsdf</Typography.Text>
-            </Flex>
+            <Tag>{ScheduleTypeLabel}</Tag>
+            <p>{data?.title}</p>
+            <p>{data?.memo}</p>
+            <p>{dayjs(data?.scheduledAt).format("YYYY.MM.DD")}</p>
           </Space>
         </Space>
       </Card>

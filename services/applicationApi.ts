@@ -3,7 +3,7 @@ import type {
   ApplicationResponse,
   CreateApplicationPayload,
 } from "@/types/application";
-import { ScheduleResponse } from "@/types/schedule";
+import { ScheduleDetailResponse } from "@/types/schedule";
 
 export const postApplication = async (
   payload: CreateApplicationPayload,
@@ -27,8 +27,8 @@ export const fetchDetailApplication = async (
 
 export const fetchDetailSchedule = async (
   id: number,
-): Promise<ScheduleResponse[]> => {
-  const response = await apiClient.get<ScheduleResponse[]>(
+): Promise<ScheduleDetailResponse[]> => {
+  const response = await apiClient.get<ScheduleDetailResponse[]>(
     `/applications/${id}/schedules`,
   );
   return response.data;

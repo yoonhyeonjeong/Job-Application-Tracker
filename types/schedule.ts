@@ -17,3 +17,12 @@ export interface ScheduleResponse {
   scheduledAt: string;
   memo?: string;
 }
+
+export interface ScheduleDetailResponse {
+  id: number;
+  applicationId: number;
+  type: string;
+  title: string;
+  scheduledAt: string;
+  memo?: string;
+}
