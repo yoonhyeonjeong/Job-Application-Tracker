@@ -16,6 +16,10 @@ export const fetchApplications = async (): Promise<ApplicationResponse[]> => {
   return response.data;
 };
 
+export const deleteApplication = async (id: Number): Promise<void> => {
+  await apiClient.delete(`/applications/${id}`);
+};
+
 export const fetchDetailApplication = async (
   id: number,
 ): Promise<ApplicationResponse> => {

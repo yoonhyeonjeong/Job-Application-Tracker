@@ -1,14 +1,25 @@
 "use client";
 
-import { Button, Card, Descriptions, Flex, Space, Tag, Typography } from "antd";
+import {
+  Button,
+  Card,
+  Descriptions,
+  Flex,
+  Popconfirm,
+  Space,
+  Tag,
+  Typography,
+  App as AntdApp,
+} from "antd";
 import { useState, type ReactNode } from "react";
 import { StatusTag } from "@/components/common/StatusTag";
 import type { ApplicationResponse } from "@/types/application";
 import { formatDate, getDaysSince } from "@/utils/date";
 import { companyTypeLabels, employmentTypeLabels } from "@/utils/format";
-import { PlusOutlined } from "@ant-design/icons";
+import { DeleteOutlined, PlusOutlined } from "@ant-design/icons";
 import ApplicationModal from "./ApplicationModal";
-import { useParams } from "next/navigation";
+import { useParams, useRouter } from "next/navigation";
+import { deleteApplication } from "@/services/applicationApi";
 
 interface ApplicationDetailProps {
   application: ApplicationResponse;
@@ -19,16 +30,30 @@ export const ApplicationDetail = ({
   application,
   onSuccess,
 }: ApplicationDetailProps): ReactNode => {
+  const { message: messageApi } = AntdApp.useApp();
+  const router = useRouter();
   const params = useParams();
   const id = Number(params.id);
   const [scheduleModal, setScheduleModalOpen] = useState<boolean>(false);
   const ddayDiff = getDaysSince(application?.appliedAt ?? "");
+
   const handleOpenScheduleModal = () => {
     setScheduleModalOpen(true);
   };
+
   const handleCloseScheduleModal = () => {
     setScheduleModalOpen(false);
   };
+
+  const handleDeleteApplication = async (id: number) => {
+    try {
+      await deleteApplication(id);
+      messageApi.success("지원 삭제 되었습니다.");
+      router.push("/");
+    } catch (error) {}
+  };
+
+  console.log(id);
   return (
     <>
       <Card>
@@ -38,15 +63,32 @@ export const ApplicationDetail = ({
               <Typography.Title level={3}>
                 {application?.companyName}
               </Typography.Title>
-              <Button
-                type="primary"
-                icon={<PlusOutlined />}
-                onClick={() => {
-                  handleOpenScheduleModal();
-                }}
-              >
-                일정 등록
-              </Button>
+              <Flex align="center" justify="center" gap="small">
+                <Popconfirm
+                  key="delete-confirm"
+                  title="지원 삭제"
+                  description="이 지원을 삭제하시겠습니까?"
+                  okText="네"
+                  cancelText="아니오"
+                  okButtonProps={{
+                    danger: true,
+                  }}
+                  onConfirm={() => handleDeleteApplication(id)}
+                >
+                  <Button danger type="primary" icon={<DeleteOutlined />}>
+                    삭제
+                  </Button>
+                </Popconfirm>
+                <Button
+                  type="primary"
+                  icon={<PlusOutlined />}
+                  onClick={() => {
+                    handleOpenScheduleModal();
+                  }}
+                >
+                  일정 등록
+                </Button>
+              </Flex>
             </Flex>
 
             <Flex align="center" gap={8}>
