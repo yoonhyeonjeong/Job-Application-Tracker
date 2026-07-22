@@ -1,40 +1,9 @@
 "use client";
 
-import { useEffect, useMemo } from "react";
+import { useEffect } from "react";
 import { useApplicationStore } from "@/hooks/useApplicationStore";
-import type {
-  ApplicationResponse,
-  ApplicationFilterParams,
-} from "@/types/application";
 
-interface UseApplicationsResult {
-  applications: ApplicationResponse[];
-  loading: boolean;
-  filters: ApplicationFilterParams;
-  setFilters: (filters: ApplicationFilterParams) => void;
-  refresh: () => Promise<void>;
-}
-
-const matchesKeyword = (
-  application: ApplicationResponse,
-  keyword?: string,
-): boolean => {
-  if (!keyword) {
-    return true;
-  }
-
-  const normalizedKeyword = keyword.trim().toLowerCase();
-  return [
-    application.companyName,
-    application.position,
-    application.location,
-    application.memo,
-  ]
-    .filter((value): value is string => Boolean(value))
-    .some((value) => value.toLowerCase().includes(normalizedKeyword));
-};
-
-export const useApplications = (): UseApplicationsResult => {
+export const useApplications = () => {
   const allApplications = useApplicationStore((state) => state.applications);
   const loading = useApplicationStore((state) => state.loading);
   const filters = useApplicationStore((state) => state.filters);
@@ -43,24 +12,46 @@ export const useApplications = (): UseApplicationsResult => {
     (state) => state.loadApplications,
   );
 
-  const applications = useMemo(() => {
-    return allApplications.filter((application) => {
-      return (
-        matchesKeyword(application, filters.keyword) &&
-        (!filters.status || application.status === filters.status) &&
-        (!filters.employmentType ||
-          application.employmentType === filters.employmentType) &&
-        (!filters.workType || application.workType === filters.workType)
-      );
-    });
-  }, [allApplications, filters]);
+  // 검색어 공백 제거 + 소문자로 변경
+  const keyword = filters.keyword?.trim().toLowerCase() ?? "";
 
+  // 전체 지원 목록에서 조건에 맞는 것만 남기기
+  const filteredApplications = allApplications.filter((application) => {
+    // 회사명 또는 직무에 검색어가 포함됐는지
+    const matchesKeyword =
+      !keyword ||
+      application.companyName.toLowerCase().includes(keyword) ||
+      application.position.toLowerCase().includes(keyword);
+
+    // 선택한 지원 상태와 같은지
+    const matchesStatus =
+      !filters.status || application.status === filters.status;
+
+    // 선택한 고용 형태와 같은지
+    const matchesEmploymentType =
+      !filters.employmentType ||
+      application.employmentType === filters.employmentType;
+
+    // 선택한 근무 형태와 같은지
+    const matchesWorkType =
+      !filters.workType || application.workType === filters.workType;
+
+    // 모든 조건을 만족한 지원만 남김
+    return (
+      matchesKeyword &&
+      matchesStatus &&
+      matchesEmploymentType &&
+      matchesWorkType
+    );
+  });
+
+  // 화면이 처음 열릴 때 지원 목록 조회
   useEffect(() => {
     void loadApplications();
   }, [loadApplications]);
 
   return {
-    applications,
+    applications: filteredApplications,
     loading,
     filters,
     setFilters,
