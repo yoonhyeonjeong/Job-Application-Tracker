@@ -82,12 +82,15 @@ const ApplicationDetailPage = () => {
         description="지원 정보와 다음 액션을 확인합니다."
       />
       {/* 지원 상세 */}
-      <ApplicationDetail application={detailData} />
+      <ApplicationDetail
+        application={detailData}
+        onSuccess={getFetchDetailScheduleData}
+      />
 
-      {/* 지원 일정 및 메모 */}
+      {/* 일정 및 메모 */}
       {detailScheduleData.length > 0 && (
         <div className="mt-30">
-          <Typography.Title level={3}>지원 일정 및 메모</Typography.Title>
+          <Typography.Title level={3}>일정 및 메모</Typography.Title>
           <Row gutter={[20, 20]}>
             {detailScheduleData.map((v) => (
               <Col key={`scheduleData-${v.id}`} xs={24} sm={12} lg={8}>

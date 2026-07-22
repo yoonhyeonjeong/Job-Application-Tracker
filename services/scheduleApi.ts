@@ -16,6 +16,10 @@ export const updateSchedule = async (
   await apiClient.patch(`/schedules/${scheduleId}`, payload);
 };
 
+export const deleteSchedule = async (scheduleId: Number): Promise<void> => {
+  await apiClient.delete(`/schedules/${scheduleId}`);
+};
+
 export const fetchUpcomingSchedules = async (): Promise<ScheduleResponse[]> => {
   const response = await apiClient.get<ScheduleResponse[]>(
     "/schedules/upcoming",

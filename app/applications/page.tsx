@@ -1,7 +1,7 @@
 "use client";
 
 import { PlusOutlined } from "@ant-design/icons";
-import { Alert, Button, Card, message } from "antd";
+import { Alert, Button, Card, App as AntdApp } from "antd";
 import { type ReactNode } from "react";
 import { ApplicationFilter } from "@/components/applications/ApplicationFilter";
 import { ApplicationTable } from "@/components/applications/ApplicationTable";
@@ -12,13 +12,12 @@ import { useRouter } from "next/navigation";
 
 const ApplicationsPage = (): ReactNode => {
   const { applications, loading, filters, setFilters } = useApplications();
+  const { message: messageApi } = AntdApp.useApp();
   const error = useApplicationStore((state) => state.error);
-  const [messageApi, contextHolder] = message.useMessage();
 
   const router = useRouter();
   return (
     <div className="page-stack">
-      {contextHolder}
       <PageHeader
         title="지원 관리"
         description="회사, 직무, 상태, 해야할일을 기준으로 지원 내역을 관리합니다."

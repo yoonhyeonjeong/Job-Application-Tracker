@@ -12,10 +12,12 @@ import { useParams } from "next/navigation";
 
 interface ApplicationDetailProps {
   application: ApplicationResponse;
+  onSuccess: () => void;
 }
 
 export const ApplicationDetail = ({
   application,
+  onSuccess,
 }: ApplicationDetailProps): ReactNode => {
   const params = useParams();
   const id = Number(params.id);
@@ -96,13 +98,12 @@ export const ApplicationDetail = ({
       </Card>
 
       {/* 일정등록 모달 */}
-      {scheduleModal && (
-        <ApplicationModal
-          open={scheduleModal}
-          applicationId={id}
-          onCancel={handleCloseScheduleModal}
-        />
-      )}
+      <ApplicationModal
+        open={scheduleModal}
+        applicationId={id}
+        onCancel={handleCloseScheduleModal}
+        onSuccess={onSuccess}
+      />
     </>
   );
 };

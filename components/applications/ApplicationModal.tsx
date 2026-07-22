@@ -1,6 +1,15 @@
 "use client";
 
-import { Alert, Card, DatePicker, Form, Input, Modal, Select } from "antd";
+import {
+  Alert,
+  App as AntdApp,
+  Card,
+  DatePicker,
+  Form,
+  Input,
+  Modal,
+  Select,
+} from "antd";
 import { useState, type ReactNode } from "react";
 import { ScheduleOption } from "@/utils/format";
 import dayjs from "dayjs";
@@ -12,15 +21,18 @@ interface ApplicationModalProps {
   open: boolean;
   applicationId: number;
   onCancel: () => void;
+  onSuccess: () => void;
 }
 
 const ApplicationModal = ({
   open,
   applicationId,
   onCancel,
+  onSuccess,
 }: ApplicationModalProps): ReactNode => {
   const [loading, setLoading] = useState<boolean>(false);
   const [errorMsg, setErrorMsg] = useState<string | null>(null);
+  const { message: messageApi } = AntdApp.useApp();
   const [form] = Form.useForm<SchedulePayload>();
 
   const handleSubmit = async (values: SchedulePayload) => {
@@ -33,6 +45,8 @@ const ApplicationModal = ({
         memo: values.memo?.trim() ?? "",
       };
       await postSchedule(payload);
+      await onSuccess();
+      messageApi.success("일정 등록을 성공했습니다.");
       form.resetFields();
       onCancel();
     } catch (error) {

@@ -9,7 +9,9 @@ import {
   Input,
   message,
   Modal,
+  Popconfirm,
   Select,
+  App as AntdApp,
 } from "antd";
 import { useEffect, useState, type ReactNode } from "react";
 import { ScheduleOption } from "@/utils/format";
@@ -19,8 +21,9 @@ import {
   SchedulePayload,
   UpdateSchedulePayload,
 } from "@/types/schedule";
-import { postSchedule, updateSchedule } from "@/services/scheduleApi";
+import { deleteSchedule, updateSchedule } from "@/services/scheduleApi";
 import axios from "axios";
+import { DeleteOutlined } from "@ant-design/icons";
 
 interface ScheduleDetailModalProps {
   schedule: ScheduleDetailResponse;
@@ -44,7 +47,7 @@ const ScheduleDetailModal = ({
 }: ScheduleDetailModalProps): ReactNode => {
   const [loading, setLoading] = useState<boolean>(false);
   const [errorMsg, setErrorMsg] = useState<string | null>(null);
-
+  const { message: messageApi } = AntdApp.useApp();
   const [form] = Form.useForm<ScheduleFormValue>();
 
   const handleSubmit = async (values: ScheduleFormValue) => {
@@ -55,7 +58,7 @@ const ScheduleDetailModal = ({
       (values.memo?.trim() ?? "") === (schedule.memo?.trim() ?? "");
 
     if (isSame) {
-      alert("변경된 내용이 없습니다.");
+      messageApi.error("변경된 내용이 없습니다.");
       return;
     }
     setLoading(true);
@@ -79,6 +82,14 @@ const ScheduleDetailModal = ({
     }
   };
 
+  const handleDeleteSchedule = async (id: number) => {
+    try {
+      await deleteSchedule(id);
+      await onSuccess();
+      onCancel();
+    } catch (error) {}
+  };
+
   useEffect(() => {
     form.setFieldsValue({
       scheduleType: schedule.type,
@@ -96,12 +107,34 @@ const ScheduleDetailModal = ({
         onOk={() => form.submit()}
         onCancel={onCancel}
         footer={[
-          <Button key="delete" danger>
-            삭제
-          </Button>,
-          <Button key="edit" type="primary" onClick={() => form.submit()}>
-            수정
-          </Button>,
+          <Popconfirm
+            key="delete-confirm"
+            title="일정 삭제"
+            description="이 일정을 삭제하시겠습니까?"
+            okText="네"
+            cancelText="아니오"
+            okButtonProps={{
+              danger: true,
+            }}
+            onConfirm={() => handleDeleteSchedule(schedule.id)}
+          >
+            <Button danger type="text" icon={<DeleteOutlined />}>
+              삭제
+            </Button>
+          </Popconfirm>,
+
+          <Popconfirm
+            key="update-confirm"
+            title="일정 수정"
+            description="변경한 내용으로 수정하시겠습니까?"
+            okText="네"
+            cancelText="아니오"
+            onConfirm={() => form.submit()}
+          >
+            <Button key="edit" type="text" loading={loading}>
+              수정
+            </Button>
+          </Popconfirm>,
         ]}
       >
         {errorMsg && <Alert type="error" message={errorMsg} showIcon />}

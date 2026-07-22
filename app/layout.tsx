@@ -4,6 +4,7 @@ import "@ant-design/v5-patch-for-react-19";
 import type { Metadata } from "next";
 import type { ReactNode } from "react";
 import { AppLayout } from "@/components/common/AppLayout";
+import AntdProvider from "./components/AntdProvider";
 
 export const metadata: Metadata = {
   title: "Job Application Tracker",
@@ -18,7 +19,9 @@ const RootLayout = ({ children }: RootLayoutProps): ReactNode => {
   return (
     <html lang="ko">
       <body>
-        <AppLayout>{children}</AppLayout>
+        <AntdProvider>
+          <AppLayout>{children}</AppLayout>
+        </AntdProvider>
       </body>
     </html>
   );
