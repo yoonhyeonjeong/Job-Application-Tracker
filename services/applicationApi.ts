@@ -1,6 +1,7 @@
 import { apiClient } from "@/services/apiClient";
 import type {
   ApplicationResponse,
+  ApplicationUpdatePayload,
   CreateApplicationPayload,
 } from "@/types/application";
 import { ScheduleDetailResponse } from "@/types/schedule";
@@ -9,6 +10,13 @@ export const postApplication = async (
   payload: CreateApplicationPayload,
 ): Promise<void> => {
   await apiClient.post("/applications", payload);
+};
+
+export const updateApplication = async (
+  id: Number,
+  payload: ApplicationUpdatePayload,
+): Promise<void> => {
+  await apiClient.patch(`/applications/${id}`, payload);
 };
 
 export const fetchApplications = async (): Promise<ApplicationResponse[]> => {

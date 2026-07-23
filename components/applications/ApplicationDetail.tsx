@@ -16,25 +16,29 @@ import { StatusTag } from "@/components/common/StatusTag";
 import type { ApplicationResponse } from "@/types/application";
 import { formatDate, getDaysSince } from "@/utils/date";
 import { companyTypeLabels, employmentTypeLabels } from "@/utils/format";
-import { DeleteOutlined, PlusOutlined } from "@ant-design/icons";
+import { DeleteOutlined, EditOutlined, PlusOutlined } from "@ant-design/icons";
 import ApplicationModal from "./ApplicationModal";
 import { useParams, useRouter } from "next/navigation";
 import { deleteApplication } from "@/services/applicationApi";
+import ApplicationDetailModal from "./ApplicationDetailModal";
 
 interface ApplicationDetailProps {
   application: ApplicationResponse;
   onSuccess: () => void;
+  onApplicationUpdateSuccess: () => Promise<void>;
 }
 
 export const ApplicationDetail = ({
   application,
   onSuccess,
+  onApplicationUpdateSuccess,
 }: ApplicationDetailProps): ReactNode => {
   const { message: messageApi } = AntdApp.useApp();
   const router = useRouter();
   const params = useParams();
   const id = Number(params.id);
   const [scheduleModal, setScheduleModalOpen] = useState<boolean>(false);
+  const [applicationModal, setApplicationModalOpen] = useState<boolean>(false);
   const ddayDiff = getDaysSince(application?.appliedAt ?? "");
 
   const handleOpenScheduleModal = () => {
@@ -43,6 +47,14 @@ export const ApplicationDetail = ({
 
   const handleCloseScheduleModal = () => {
     setScheduleModalOpen(false);
+  };
+
+  const handleOpenApplicationModal = () => {
+    setApplicationModalOpen(true);
+  };
+
+  const handleCloseApplicationModal = () => {
+    setApplicationModalOpen(false);
   };
 
   const handleDeleteApplication = async (id: number) => {
@@ -64,6 +76,12 @@ export const ApplicationDetail = ({
                 {application?.companyName}
               </Typography.Title>
               <Flex align="center" justify="center" gap="small">
+                <Button
+                  icon={<EditOutlined />}
+                  onClick={() => setApplicationModalOpen(true)}
+                >
+                  수정
+                </Button>
                 <Popconfirm
                   key="delete-confirm"
                   title="지원 삭제"
@@ -145,6 +163,15 @@ export const ApplicationDetail = ({
         applicationId={id}
         onCancel={handleCloseScheduleModal}
         onSuccess={onSuccess}
+      />
+
+      {/* 지원 상세 모달 (수정용) */}
+      <ApplicationDetailModal
+        open={applicationModal}
+        application={application}
+        onCancel={handleCloseApplicationModal}
+        onSuccess={onApplicationUpdateSuccess}
+        id={id}
       />
     </>
   );

@@ -29,7 +29,7 @@ export const companyTypeLabels: Record<CompanyType, string> = {
 };
 
 // select
-export const companyTypeOptions = [
+export const companyTypeOptions: { value: string; label: string }[] = [
   {
     value: "SI",
     label: "SI",
@@ -83,7 +83,7 @@ export const statusOptions: { value: ApplicationStatus; label: string }[] = [
   },
 ];
 
-export const employmentTypeOptions = [
+export const employmentTypeOptions: { value: string; label: string }[] = [
   {
     value: "fullTime",
     label: "정규직",
@@ -98,7 +98,7 @@ export const employmentTypeOptions = [
   },
 ];
 
-export const workTypeOptions = [
+export const workTypeOptions: { value: string; label: string }[] = [
   {
     value: "onsite",
     label: "출근",
@@ -113,7 +113,7 @@ export const workTypeOptions = [
   },
 ];
 
-export const jobPlatformOptions = [
+export const jobPlatformOptions: { value: string; label: string }[] = [
   {
     value: "jobkorea",
     label: "잡코리아",

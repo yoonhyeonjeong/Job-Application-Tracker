@@ -85,6 +85,7 @@ const ApplicationDetailPage = () => {
       <ApplicationDetail
         application={detailData}
         onSuccess={getFetchDetailScheduleData}
+        onApplicationUpdateSuccess={getFetchDetailData}
       />
 
       {/* 일정 및 메모 */}
