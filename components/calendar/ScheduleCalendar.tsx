@@ -31,6 +31,13 @@ const ScheduleCalendar = ({
     useState<ScheduleResponse | null>(null);
   const [detailModalOpen, setDetailModalOpen] = useState<boolean>(false);
 
+  const filterInterviewCount = schedule.filter(
+    (schedule) => schedule.scheduleType === "interview",
+  ).length;
+  const filterAssignmentCount = schedule.filter(
+    (schedule) => schedule.scheduleType === "assignment",
+  ).length;
+
   const calendarEvents = schedule.map((schedule) => {
     return {
       id: String(schedule.id),
@@ -70,8 +77,9 @@ const ScheduleCalendar = ({
   return (
     <>
       <Flex gap="small">
-        <Badge color="#1FA463" text="면접" />
-        <Badge color="#D99A00" text="과제" />
+        이번 달 전체 {schedule.length}건
+        <Badge color="#1FA463" text={`면접 ${filterInterviewCount}건`} />
+        <Badge color="#D99A00" text={`과제 ${filterAssignmentCount}건`} />
       </Flex>
 
       <FullCalendar
