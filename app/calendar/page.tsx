@@ -9,17 +9,16 @@ import ScheduleCalendar from "@/components/calendar/ScheduleCalendar";
 
 const CalendarPage = () => {
   const [calendarData, setCalendarData] = useState<ScheduleResponse[]>([]);
-  const currentMonth = dayjs();
-  const startDate = currentMonth.startOf("month").format("YYYY-MM-DD");
-  const endDate = currentMonth.endOf("month").format("YYYY-MM-DD");
 
-  const loadSchedules = useCallback(async () => {
+  const [calendarParams, setCalendarParams] = useState<MonthlyScheduleParams>(
+    () => ({
+      startDate: dayjs().startOf("month").format("YYYY-MM-DD"),
+      endDate: dayjs().endOf("month").format("YYYY-MM-DD"),
+    }),
+  );
+
+  const loadSchedules = useCallback(async (params: MonthlyScheduleParams) => {
     try {
-      const params: MonthlyScheduleParams = {
-        startDate: startDate,
-        endDate: endDate,
-      };
-
       const data = await fetchSchedule(params);
       setCalendarData(data);
     } catch (error) {
@@ -28,18 +27,29 @@ const CalendarPage = () => {
     }
   }, []);
 
-  useEffect(() => {
-    loadSchedules();
-  }, [loadSchedules]);
+  const handleMonthChange = useCallback(
+    async (params: MonthlyScheduleParams) => {
+      setCalendarParams(params);
+      await loadSchedules(params);
+    },
+    [loadSchedules],
+  );
 
-  console.log(calendarData);
+  const refreshSchedules = useCallback(async () => {
+    await loadSchedules(calendarParams);
+  }, [loadSchedules, calendarParams]);
+
   return (
     <div className="page-stack">
       <PageHeader
         title="일정"
         description="면접, 과제, 마감일, 후속 연락 일정을 확인합니다."
       />
-      <ScheduleCalendar schedule={calendarData} onSuccess={loadSchedules} />
+      <ScheduleCalendar
+        schedule={calendarData}
+        onMonthChange={handleMonthChange}
+        onSuccess={refreshSchedules}
+      />
     </div>
   );
 };

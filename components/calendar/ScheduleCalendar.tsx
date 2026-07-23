@@ -1,24 +1,32 @@
 "use client";
 
-import FullCalendar, { EventClickInfo } from "@fullcalendar/react";
+import FullCalendar, {
+  EventClickInfo,
+  type DatesSetInfo,
+} from "@fullcalendar/react";
 import dayGridPlugin from "@fullcalendar/react/daygrid";
 import classicThemePlugin from "@fullcalendar/react/themes/classic";
-
 import "@fullcalendar/react/skeleton.css";
 import "@fullcalendar/react/themes/classic/theme.css";
 import "@fullcalendar/react/themes/classic/palette.css";
-import { ScheduleResponse } from "@/types/schedule";
+import { MonthlyScheduleParams, ScheduleResponse } from "@/types/schedule";
 import { Badge, Flex } from "antd";
 import { scheduleTypeColors } from "@/utils/schedules";
 import { useState } from "react";
 import ScheduleDetailModal from "../applications/ScheduleDetailModal";
+import dayjs from "dayjs";
 
 interface ScheduleCalendarProps {
   schedule: ScheduleResponse[];
+  onMonthChange: (params: MonthlyScheduleParams) => Promise<void>;
   onSuccess: () => void;
 }
 
-const ScheduleCalendar = ({ schedule, onSuccess }: ScheduleCalendarProps) => {
+const ScheduleCalendar = ({
+  schedule,
+  onMonthChange,
+  onSuccess,
+}: ScheduleCalendarProps) => {
   const [selectedSchedule, setSelectedSchedule] =
     useState<ScheduleResponse | null>(null);
   const [detailModalOpen, setDetailModalOpen] = useState<boolean>(false);
@@ -32,6 +40,17 @@ const ScheduleCalendar = ({ schedule, onSuccess }: ScheduleCalendarProps) => {
       className: `schedule-event-${schedule.scheduleType}`,
     };
   });
+
+  const handleDatesSet = (info: DatesSetInfo) => {
+    const params: MonthlyScheduleParams = {
+      startDate: dayjs(info.view.currentStart).format("YYYY-MM-DD"),
+      endDate: dayjs(info.view.currentEnd)
+        .subtract(1, "day")
+        .format("YYYY-MM-DD"),
+    };
+
+    void onMonthChange(params);
+  };
 
   const handleEventClick = (info: EventClickInfo) => {
     const scheduleId = Number(info.event.id);
@@ -58,6 +77,7 @@ const ScheduleCalendar = ({ schedule, onSuccess }: ScheduleCalendarProps) => {
       <FullCalendar
         plugins={[dayGridPlugin, classicThemePlugin]}
         initialView="dayGridMonth"
+        datesSet={handleDatesSet}
         headerToolbar={{
           left: "prev,next today",
           center: "title",
