@@ -3,7 +3,11 @@ import { ScheduleType } from "@/types/schedule";
 export const scheduleTypeLabels: Record<ScheduleType, string> = {
   interview: "면접일",
   assignment: "과제 제출일",
-  deadline: "마감일",
+};
+
+export const scheduleTypeColors: Record<ScheduleType, string> = {
+  interview: "#1FA463",
+  assignment: "#D99A00",
 };
 
 // 요일별 색상 매핑

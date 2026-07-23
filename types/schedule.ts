@@ -1,4 +1,9 @@
-export type ScheduleType = "interview" | "assignment" | "deadline";
+export type ScheduleType = "interview" | "assignment";
+
+export interface MonthlyScheduleParams {
+  startDate: string;
+  endDate: string;
+}
 
 export interface SchedulePayload {
   applicationId: number;

@@ -6,7 +6,7 @@ import {
   CalendarOutlined,
   FileTextOutlined,
   ProfileOutlined,
-  ReadOutlined
+  ReadOutlined,
 } from "@ant-design/icons";
 import { ConfigProvider, Layout, Menu, Typography } from "antd";
 import Link from "next/link";
@@ -26,22 +26,22 @@ const menuItems = [
   {
     key: "/",
     icon: <AppstoreOutlined />,
-    label: <Link href="/">대시보드</Link>
+    label: <Link href="/">대시보드</Link>,
   },
   {
     key: "/applications",
     icon: <FileTextOutlined />,
-    label: <Link href="/applications">지원 관리</Link>
+    label: <Link href="/applications">지원 관리</Link>,
   },
   {
     key: "/calendar",
     icon: <CalendarOutlined />,
-    label: <Link href="/calendar">일정</Link>
+    label: <Link href="/calendar">일정</Link>,
   },
   {
     key: "/statistics",
     icon: <BarChartOutlined />,
-    label: <Link href="/statistics">통계</Link>
+    label: <Link href="/statistics">통계</Link>,
   },
   {
     key: "guide",
@@ -50,15 +50,15 @@ const menuItems = [
     children: [
       {
         key: "/guide",
-        label: <Link href="/guide">프로젝트 가이드</Link>
+        label: <Link href="/guide">프로젝트 가이드</Link>,
       },
       {
         key: "/guide/components",
         icon: <ProfileOutlined />,
-        label: <Link href="/guide/components">컴포넌트</Link>
-      }
-    ]
-  }
+        label: <Link href="/guide/components">컴포넌트</Link>,
+      },
+    ],
+  },
 ];
 
 const getSelectedKey = (pathname: string): string => {
@@ -93,7 +93,9 @@ export const AppLayout = ({ children }: AppLayoutProps): ReactNode => {
       <Layout className="app-shell">
         <Sider breakpoint="lg" collapsedWidth="0" className="app-sidebar">
           <div className="app-logo">
-            <Typography.Text strong>Job Tracker</Typography.Text>
+            <Link href="/">
+              <Typography.Text strong>Job Tracker</Typography.Text>
+            </Link>
           </div>
           <Menu
             theme="dark"
@@ -105,7 +107,9 @@ export const AppLayout = ({ children }: AppLayoutProps): ReactNode => {
         </Sider>
         <Layout className="app-main">
           <Header className="app-header">
-            <Typography.Text type="secondary">지원 관리 대시보드</Typography.Text>
+            <Typography.Text type="secondary">
+              지원 관리 대시보드
+            </Typography.Text>
           </Header>
           <Content className="app-content">{children}</Content>
         </Layout>

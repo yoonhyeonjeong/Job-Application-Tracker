@@ -1,9 +1,20 @@
 import { apiClient } from "@/services/apiClient";
 import {
+  MonthlyScheduleParams,
   SchedulePayload,
   ScheduleResponse,
   UpdateSchedulePayload,
 } from "@/types/schedule";
+
+export const fetchSchedule = async (
+  params: MonthlyScheduleParams,
+): Promise<ScheduleResponse[]> => {
+  const response = await apiClient.get<ScheduleResponse[]>("/schedules", {
+    params,
+  });
+
+  return response.data;
+};
 
 export const postSchedule = async (payload: SchedulePayload): Promise<void> => {
   await apiClient.post("/schedules", payload);

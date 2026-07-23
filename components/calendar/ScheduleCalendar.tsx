@@ -1,61 +1,58 @@
-'use client';
+"use client";
 
-import { Badge, Calendar, Card, List, Space, Typography } from 'antd';
-import type { Dayjs } from 'dayjs';
-import type { ReactNode } from 'react';
-import type { Schedule, ScheduleType } from '@/types/schedule';
-import { formatDateTime } from '@/utils/date';
+import FullCalendar from "@fullcalendar/react";
+import dayGridPlugin from "@fullcalendar/react/daygrid";
+import classicThemePlugin from "@fullcalendar/react/themes/classic";
+
+import "@fullcalendar/react/skeleton.css";
+import "@fullcalendar/react/themes/classic/theme.css";
+import "@fullcalendar/react/themes/classic/palette.css";
+import { ScheduleResponse, ScheduleType } from "@/types/schedule";
+import { Badge, Flex } from "antd";
+import { scheduleTypeColors } from "@/utils/schedules";
 
 interface ScheduleCalendarProps {
-  schedules: Schedule[];
+  schedule: ScheduleResponse[];
 }
 
-const scheduleTypeLabels: Record<ScheduleType, string> = {
-  interview: '면접',
-  assignment: '과제',
-  deadline: '마감'
-};
-
-const badgeStatuses: Record<ScheduleType, 'success' | 'processing' | 'warning' | 'default'> = {
-  interview: 'processing',
-  assignment: 'warning',
-  deadline: 'default'
-};
-
-export const ScheduleCalendar = ({ schedules }: ScheduleCalendarProps): ReactNode => {
-  const dateCellRender = (date: Dayjs): ReactNode => {
-    const daySchedules = schedules.filter((schedule) => date.isSame(schedule.scheduledAt, 'day'));
-
-    return (
-      <List
-        size="small"
-        dataSource={daySchedules}
-        renderItem={(schedule) => (
-          <List.Item className="calendar-list-item">
-            <Badge status={badgeStatuses[schedule.type]} text={scheduleTypeLabels[schedule.type]} />
-          </List.Item>
-        )}
-      />
-    );
-  };
+const ScheduleCalendar = ({ schedule }: ScheduleCalendarProps) => {
+  const calendarEvents = schedule.map((schedule) => {
+    return {
+      id: String(schedule.id),
+      title: `${schedule.companyName} ${schedule.title}`,
+      start: schedule.scheduledAt,
+      color: scheduleTypeColors[schedule.scheduleType],
+      className: `schedule-event-${schedule.scheduleType}`,
+    };
+  });
 
   return (
-    <Card>
-      <Calendar cellRender={(date) => dateCellRender(date)} />
-      <Space direction="vertical" className="full-width">
-        <Typography.Title level={4}>다가오는 일정</Typography.Title>
-        <List<Schedule>
-          dataSource={schedules}
-          renderItem={(schedule) => (
-            <List.Item>
-              <Space direction="vertical" size={2}>
-                <Typography.Text strong>{schedule.title}</Typography.Text>
-                <Typography.Text type="secondary">{formatDateTime(schedule.scheduledAt)}</Typography.Text>
-              </Space>
-            </List.Item>
-          )}
-        />
-      </Space>
-    </Card>
+    <>
+      <Flex gap="small">
+        <Badge color="#1FA463" text="면접" />
+        <Badge color="#D99A00" text="과제" />
+      </Flex>
+
+      <FullCalendar
+        plugins={[dayGridPlugin, classicThemePlugin]}
+        initialView="dayGridMonth"
+        headerToolbar={{
+          left: "prev,next today",
+          center: "title",
+          right: "",
+        }}
+        height="auto"
+        events={calendarEvents}
+        eventTimeFormat={{
+          hour: "2-digit",
+          minute: "2-digit",
+          hour12: false,
+        }}
+        dayMaxEvents={3}
+        //   dateClick={handleDateClick}
+      />
+    </>
   );
 };
+
+export default ScheduleCalendar;

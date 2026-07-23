@@ -40,6 +40,7 @@ const ApplicationModal = ({
     try {
       const payload = {
         ...values,
+        title: values.title?.trim() ?? "",
         applicationId: applicationId,
         scheduledAt: dayjs(values.scheduledAt).format("YYYY-MM-DDTHH:mm:ss"),
         memo: values.memo?.trim() ?? "",
