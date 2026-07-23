@@ -39,7 +39,7 @@ const CalendarPage = () => {
         title="일정"
         description="면접, 과제, 마감일, 후속 연락 일정을 확인합니다."
       />
-      <ScheduleCalendar schedule={calendarData} />
+      <ScheduleCalendar schedule={calendarData} onSuccess={loadSchedules} />
     </div>
   );
 };

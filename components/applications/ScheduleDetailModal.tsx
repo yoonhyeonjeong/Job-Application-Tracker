@@ -19,6 +19,7 @@ import dayjs, { Dayjs } from "dayjs";
 import {
   ScheduleDetailResponse,
   SchedulePayload,
+  ScheduleResponse,
   UpdateSchedulePayload,
 } from "@/types/schedule";
 import { deleteSchedule, updateSchedule } from "@/services/scheduleApi";
@@ -26,10 +27,10 @@ import axios from "axios";
 import { DeleteOutlined } from "@ant-design/icons";
 
 interface ScheduleDetailModalProps {
-  schedule: ScheduleDetailResponse;
+  schedule: ScheduleResponse;
   open: boolean;
   onCancel: () => void;
-  onSuccess: () => Promise<void>;
+  onSuccess: () => void;
 }
 
 type ScheduleFormValue = Omit<
@@ -52,7 +53,7 @@ const ScheduleDetailModal = ({
 
   const handleSubmit = async (values: ScheduleFormValue) => {
     const isSame =
-      values.scheduleType === schedule.type &&
+      values.scheduleType === schedule.scheduleType &&
       values.title.trim() === schedule.title.trim() &&
       values.scheduledAt.isSame(dayjs(schedule.scheduledAt)) &&
       (values.memo?.trim() ?? "") === (schedule.memo?.trim() ?? "");
@@ -92,7 +93,7 @@ const ScheduleDetailModal = ({
 
   useEffect(() => {
     form.setFieldsValue({
-      scheduleType: schedule.type,
+      scheduleType: schedule.scheduleType,
       title: schedule.title,
       scheduledAt: dayjs(schedule.scheduledAt),
       memo: schedule.memo,
@@ -106,6 +107,7 @@ const ScheduleDetailModal = ({
         open={open}
         onOk={() => form.submit()}
         onCancel={onCancel}
+        forceRender
         footer={[
           <Popconfirm
             key="delete-confirm"
