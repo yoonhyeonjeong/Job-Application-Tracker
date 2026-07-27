@@ -14,7 +14,7 @@ interface ApplicationStore {
   loading: boolean;
   error?: string;
   setFilters: (filters: ApplicationFilterParams) => void;
-  loadApplications: () => Promise<void>;
+  loadApplications: () => void;
   addApplication?: (payload: ApplicationCreatePayload) => Promise<void>;
 }
 

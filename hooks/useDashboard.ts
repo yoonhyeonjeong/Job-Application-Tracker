@@ -34,6 +34,7 @@ const useDashboard = () => {
     dashboardLoading: loading,
     refreshDashboard: loadDashboard,
     summaryData,
+    dashboardData,
   };
 };
 
