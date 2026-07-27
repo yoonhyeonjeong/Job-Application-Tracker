@@ -12,7 +12,7 @@ import { useApplicationStore } from "@/hooks/useApplicationStore";
 import { fetchUpcomingSchedules } from "@/services/scheduleApi";
 import { UpcomingSchedules } from "@/components/dashboard/UpcomingSchedules";
 import { fetchDashboard } from "@/services/dashboardApi";
-import { DashboardResponse } from "@/types/dashboard";
+import { DashboardResponse, DashboardSummary } from "@/types/dashboard";
 
 const DashboardPage = () => {
   const [scheduleLoading, setScheduleLoading] = useState<boolean>(false);
@@ -50,7 +50,7 @@ const DashboardPage = () => {
   }, [loadApplications, fetchSchedules, loadDashboard]);
 
   // 대시보드 카드
-  const summaryData = {
+  const summaryData: DashboardSummary = {
     totalCount: dashboardData?.summary.totalCount ?? 0, // 총 지원 건수
     inProgressCount: dashboardData?.summary.inProgressCount ?? 0, // 진행중 건수
     interviewCount: dashboardData?.summary.interviewCount ?? 0, // 면접 건수

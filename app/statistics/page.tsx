@@ -1,38 +1,31 @@
-// import type { ReactNode } from "react";
-// import { StatisticsDashboardChart } from "@/components/dashboard/StatisticsDashboardChart";
-// import { StatisticsCards } from "@/components/dashboard/StatisticsCards";
-// import { PageHeader } from "@/components/common/PageHeader";
-// import { getApplications } from "@/services/applicationService";
-// import { getStatusOverview } from "@/services/dashboardService";
+"use client";
 
-// const StatisticsPage = async (): Promise<ReactNode> => {
-//   const applications = await getApplications();
-//   const interviewCount = applications.filter(
-//     (application) => application.status === "interview",
-//   ).length;
-//   const offerCount = applications.filter(
-//     (application) => application.status === "offer",
-//   ).length;
-//   const rejectedCount = applications.filter(
-//     (application) => application.status === "rejected",
-//   ).length;
-//   const total = applications.length || 1;
-//   const statusOverview = await getStatusOverview();
+import { PageHeader } from "@/components/common/PageHeader";
+import { SummaryCards } from "@/components/dashboard/SummaryCards";
+import useStatistics from "@/hooks/useStatistics";
+import useDashboard from "@/hooks/useDashboard";
+import { Skeleton } from "antd";
+import StatisticsFunnel from "@/components/statistics/StatisticsFunnel";
 
-//   return (
-//     <div className="page-stack">
-//       <PageHeader
-//         title="통계"
-//         description="대시보드 차트로 지원 상태와 전환 지표를 확인합니다."
-//       />
-//       <StatisticsCards
-//         interviewRate={Math.round((interviewCount / total) * 100)}
-//         offerRate={Math.round((offerCount / total) * 100)}
-//         rejectedRate={Math.round((rejectedCount / total) * 100)}
-//       />
-//       <StatisticsDashboardChart items={statusOverview} />
-//     </div>
-//   );
-// };
+const StatisticsPage = () => {
+  // 통계함수 호출
+  const { statisticsLoading, statisticsData } = useStatistics();
+  // 대시보드 호출
+  const { dashboardLoading, summaryData } = useDashboard();
 
-// export default StatisticsPage;
+  if (statisticsLoading || dashboardLoading) {
+    return <Skeleton active paragraph={{ rows: 2 }} />;
+  }
+  return (
+    <div className="page-stack">
+      <PageHeader
+        title="통계"
+        description="대시보드 차트로 지원 상태와 전환 지표를 확인합니다."
+      />
+      <SummaryCards summary={summaryData} loading={dashboardLoading} />
+      {statisticsData && <StatisticsFunnel data={statisticsData} />}
+    </div>
+  );
+};
+
+export default StatisticsPage;
