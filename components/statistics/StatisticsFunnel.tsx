@@ -18,6 +18,12 @@ interface StatisticsFunnelProps {
   data: ApplicationFunnelResponse | null;
 }
 
+interface ChartDataItem {
+  name: string;
+  count: number;
+  color: string;
+}
+
 const StatisticsFunnel = ({ data }: StatisticsFunnelProps) => {
   // data가 null이면 전체 지원 건수를 0으로 사용
   const appliedCount = data?.appliedCount ?? 0;
@@ -31,7 +37,7 @@ const StatisticsFunnel = ({ data }: StatisticsFunnelProps) => {
     return Math.round((count / appliedCount) * 100);
   };
 
-  const chartData = [
+  const chartData: ChartDataItem[] = [
     {
       name: "전체 지원",
       count: appliedCount,
