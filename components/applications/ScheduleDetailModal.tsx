@@ -27,7 +27,7 @@ import axios from "axios";
 import { DeleteOutlined } from "@ant-design/icons";
 
 interface ScheduleDetailModalProps {
-  schedule: ScheduleResponse;
+  schedule: ScheduleDetailResponse | ScheduleResponse;
   open: boolean;
   onCancel: () => void;
   onSuccess: () => void;
@@ -50,10 +50,11 @@ const ScheduleDetailModal = ({
   const [errorMsg, setErrorMsg] = useState<string | null>(null);
   const { message: messageApi } = AntdApp.useApp();
   const [form] = Form.useForm<ScheduleFormValue>();
+  const scheduleType = "scheduleType" in schedule ? schedule.scheduleType : schedule.type;
 
   const handleSubmit = async (values: ScheduleFormValue) => {
     const isSame =
-      values.scheduleType === schedule.scheduleType &&
+      values.scheduleType === scheduleType &&
       values.title.trim() === schedule.title.trim() &&
       values.scheduledAt.isSame(dayjs(schedule.scheduledAt)) &&
       (values.memo?.trim() ?? "") === (schedule.memo?.trim() ?? "");
@@ -93,12 +94,12 @@ const ScheduleDetailModal = ({
 
   useEffect(() => {
     form.setFieldsValue({
-      scheduleType: schedule.scheduleType,
+      scheduleType,
       title: schedule.title,
       scheduledAt: dayjs(schedule.scheduledAt),
       memo: schedule.memo,
     });
-  }, [schedule, form]);
+  }, [schedule, scheduleType, form]);
 
   return (
     <>

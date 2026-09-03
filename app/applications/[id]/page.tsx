@@ -11,7 +11,7 @@ import {
 } from "@/services/applicationApi";
 import { Col, Row, Skeleton, Typography } from "antd";
 import { ScheduleCard } from "@/components/schedule/ScheduleCard";
-import { ScheduleDetailResponse, ScheduleResponse } from "@/types/schedule";
+import { ScheduleDetailResponse } from "@/types/schedule";
 import ScheduleDetailModal from "@/components/applications/ScheduleDetailModal";
 
 const ApplicationDetailPage = () => {
@@ -27,7 +27,7 @@ const ApplicationDetailPage = () => {
   >([]);
   const [detailModalOpen, setDetailModalOpen] = useState<boolean>(false);
   const [selectedSchedule, SetSelectedSchedule] =
-    useState<ScheduleResponse | null>(null);
+    useState<ScheduleDetailResponse | null>(null);
 
   const getFetchDetailData = useCallback(async () => {
     setLoading(true);
@@ -53,7 +53,7 @@ const ApplicationDetailPage = () => {
     }
   }, [id]);
 
-  const handleOpenScheduleDetail = (v: ScheduleResponse) => {
+  const handleOpenScheduleDetail = (v: ScheduleDetailResponse) => {
     setDetailModalOpen(true);
     SetSelectedSchedule(v);
   };
