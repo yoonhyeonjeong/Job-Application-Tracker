@@ -4,8 +4,8 @@ import { create } from "zustand";
 import { fetchApplications } from "@/services/applicationApi";
 import type {
   ApplicationResponse,
-  ApplicationCreatePayload,
   ApplicationFilterParams,
+  CreateApplicationPayload,
 } from "@/types/application";
 
 interface ApplicationStore {
@@ -15,7 +15,7 @@ interface ApplicationStore {
   error?: string;
   setFilters: (filters: ApplicationFilterParams) => void;
   loadApplications: () => void;
-  addApplication?: (payload: ApplicationCreatePayload) => Promise<void>;
+  addApplication?: (payload: CreateApplicationPayload) => Promise<void>;
 }
 
 export const useApplicationStore = create<ApplicationStore>((set) => ({

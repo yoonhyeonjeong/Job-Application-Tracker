@@ -2,7 +2,10 @@
 
 import { Button, Card, Form, message } from "antd";
 import { useState, type ReactNode } from "react";
-import type { CreateApplicationPayload } from "@/types/application";
+import type {
+  ApplicationFormValues,
+  CreateApplicationPayload,
+} from "@/types/application";
 import { PageHeader } from "@/components/common/PageHeader";
 import { postApplication } from "@/services/applicationApi";
 import { useRouter } from "next/navigation";
@@ -12,18 +15,20 @@ import { ApplicationFormFields } from "@/components/applications/ApplicationForm
 const ApplicationsNewPage = (): ReactNode => {
   const router = useRouter();
   const [loading, setLoading] = useState<boolean>(false);
-  const [form] = Form.useForm<CreateApplicationPayload>();
+  const [form] = Form.useForm<ApplicationFormValues>();
   // 프리랜서인지 여부 체크
   const employmentType = Form.useWatch("employmentType", form);
   const isFreelance = employmentType === "freelance";
 
-  const handleSubmit = async (values: CreateApplicationPayload) => {
+  const handleSubmit = async (values: ApplicationFormValues) => {
     setLoading(true);
     try {
-      const payload = {
+      const payload: CreateApplicationPayload = {
         ...values,
         appliedAt: dayjs(values.appliedAt).format("YYYY-MM-DD"),
-        deadline: dayjs(values.deadline).format("YYYY-MM-DD"),
+        deadline: values.deadline
+          ? dayjs(values.deadline).format("YYYY-MM-DD")
+          : undefined,
         nextAction: values.nextAction?.trim(),
         memo: values.memo?.trim(),
       };
@@ -46,7 +51,7 @@ const ApplicationsNewPage = (): ReactNode => {
       />
 
       <Card className="application-form-card">
-        <Form<CreateApplicationPayload>
+        <Form<ApplicationFormValues>
           form={form}
           layout="vertical"
           onFinish={handleSubmit}

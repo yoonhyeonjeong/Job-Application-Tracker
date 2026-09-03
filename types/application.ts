@@ -20,13 +20,6 @@ export type CompanyType =
   | "INHOUSE"
   | "STARTUP";
 
-export type ApplicationCreatePayload = Omit<
-  ApplicationResponse,
-  "id" | "createdAt" | "updatedAt"
->;
-
-export type ApplicationUpdatePayload = Partial<ApplicationCreatePayload>;
-
 export interface ApplicationFilterParams {
   keyword?: string;
   status?: ApplicationStatus;
@@ -40,7 +33,7 @@ export interface CreateApplicationPayload {
   status: ApplicationStatus; // 상태
   position: string; // 직무
   employmentType: EmploymentType; // 고용형태
-  projectName: string; // 프로젝트명
+  projectName?: string; // 프로젝트명
   workType: WorkType; // 근무형태
   jobPlatform: string; // 지원 플랫폼
   location?: string; // 지역
@@ -49,6 +42,16 @@ export interface CreateApplicationPayload {
   nextAction?: string; // 다음 행동
   memo?: string; // 메모
 }
+
+export type ApplicationUpdatePayload = Partial<CreateApplicationPayload>;
+
+export type ApplicationFormValues = Omit<
+  CreateApplicationPayload,
+  "appliedAt" | "deadline"
+> & {
+  appliedAt: Dayjs;
+  deadline?: Dayjs;
+};
 
 // 지원 response
 export interface ApplicationResponse {
@@ -67,3 +70,4 @@ export interface ApplicationResponse {
   nextAction?: string; // 다음 행동
   memo?: string; // 메모
 }
+import type { Dayjs } from "dayjs";

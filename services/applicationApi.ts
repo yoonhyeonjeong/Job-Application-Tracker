@@ -13,7 +13,7 @@ export const postApplication = async (
 };
 
 export const updateApplication = async (
-  id: Number,
+  id: number,
   payload: ApplicationUpdatePayload,
 ): Promise<void> => {
   await apiClient.patch(`/applications/${id}`, payload);
@@ -24,7 +24,7 @@ export const fetchApplications = async (): Promise<ApplicationResponse[]> => {
   return response.data;
 };
 
-export const deleteApplication = async (id: Number): Promise<void> => {
+export const deleteApplication = async (id: number): Promise<void> => {
   await apiClient.delete(`/applications/${id}`);
 };
 

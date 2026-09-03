@@ -21,13 +21,13 @@ export const postSchedule = async (payload: SchedulePayload): Promise<void> => {
 };
 
 export const updateSchedule = async (
-  scheduleId: Number,
+  scheduleId: number,
   payload: UpdateSchedulePayload,
 ): Promise<void> => {
   await apiClient.patch(`/schedules/${scheduleId}`, payload);
 };
 
-export const deleteSchedule = async (scheduleId: Number): Promise<void> => {
+export const deleteSchedule = async (scheduleId: number): Promise<void> => {
   await apiClient.delete(`/schedules/${scheduleId}`);
 };
 

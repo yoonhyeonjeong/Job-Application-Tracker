@@ -10,10 +10,11 @@ import {
   App as AntdApp,
 } from "antd";
 import { useEffect, useState, type ReactNode } from "react";
-import dayjs, { Dayjs } from "dayjs";
+import dayjs from "dayjs";
 import axios from "axios";
 import {
   ApplicationResponse,
+  ApplicationFormValues,
   ApplicationUpdatePayload,
 } from "@/types/application";
 import { updateApplication } from "@/services/applicationApi";
@@ -22,18 +23,10 @@ import { ApplicationFormFields } from "./ApplicationFormFields";
 interface ApplicationeDetailModalProps {
   application: ApplicationResponse;
   open: boolean;
-  id: Number;
+  id: number;
   onCancel: () => void;
   onSuccess: () => Promise<void>;
 }
-
-type ApplicationFormValue = Omit<
-  ApplicationUpdatePayload,
-  "appliedAt" | "deadline"
-> & {
-  appliedAt: Dayjs;
-  deadline: Dayjs;
-};
 
 const ApplicationDetailModal = ({
   application,
@@ -45,13 +38,13 @@ const ApplicationDetailModal = ({
   const [loading, setLoading] = useState<boolean>(false);
   const [errorMsg, setErrorMsg] = useState<string | null>(null);
   const { message: messageApi } = AntdApp.useApp();
-  const [form] = Form.useForm<ApplicationFormValue>();
+  const [form] = Form.useForm<ApplicationFormValues>();
 
   const employmentType = Form.useWatch("employmentType", form);
   const showProjectName =
     employmentType === "freelance" || Boolean(application.projectName);
 
-  const handleSubmit = async (values: ApplicationFormValue) => {
+  const handleSubmit = async (values: ApplicationFormValues) => {
     const normalize = (value?: string | null) => value?.trim() ?? "";
 
     const isSame =
@@ -81,7 +74,9 @@ const ApplicationDetailModal = ({
         ...values,
         memo: values.memo?.trim(),
         appliedAt: dayjs(values.appliedAt).format("YYYY-MM-DD"),
-        deadline: dayjs(values.deadline).format("YYYY-MM-DD"),
+        deadline: values.deadline
+          ? dayjs(values.deadline).format("YYYY-MM-DD")
+          : undefined,
       };
       await updateApplication(id, payload);
       await onSuccess();
@@ -139,7 +134,7 @@ const ApplicationDetailModal = ({
         {errorMsg && <Alert type="error" message={errorMsg} showIcon />}
 
         <Card className={`application-form-card ${errorMsg ? "mt-20" : ""}`}>
-          <Form<ApplicationFormValue>
+          <Form<ApplicationFormValues>
             form={form}
             layout="vertical"
             onFinish={handleSubmit}
