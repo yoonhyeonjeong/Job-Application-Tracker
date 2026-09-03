@@ -1,3 +1,5 @@
+import type { Dayjs } from "dayjs";
+
 export type ApplicationStatus =
   | "applied"
   | "documentPassed"
@@ -70,4 +72,3 @@ export interface ApplicationResponse {
   nextAction?: string; // 다음 행동
   memo?: string; // 메모
 }
-import type { Dayjs } from "dayjs";
