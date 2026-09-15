@@ -5,6 +5,7 @@ import type { Metadata } from "next";
 import type { ReactNode } from "react";
 import { AppLayout } from "@/components/common/AppLayout";
 import AntdProvider from "./components/AntdProvider";
+import ReactQueryProvider from "./components/ReactQueryProvider";
 
 export const metadata: Metadata = {
   title: "Job Application Tracker",
@@ -20,7 +21,9 @@ const RootLayout = ({ children }: RootLayoutProps): ReactNode => {
     <html lang="ko">
       <body>
         <AntdProvider>
-          <AppLayout>{children}</AppLayout>
+          <ReactQueryProvider>
+            <AppLayout>{children}</AppLayout>
+          </ReactQueryProvider>
         </AntdProvider>
       </body>
     </html>

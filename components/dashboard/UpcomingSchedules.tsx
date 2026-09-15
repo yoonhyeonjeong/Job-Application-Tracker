@@ -20,7 +20,7 @@ export const UpcomingSchedules = ({
   }
   const schedulesData = [...schedules].slice(0, 3);
   return (
-    <Card title="다가오는 일정">
+    <Card title="다가오는 일정" style={{ height: "100%" }}>
       <List<ScheduleResponse>
         className="scedule-list"
         loading={loading}

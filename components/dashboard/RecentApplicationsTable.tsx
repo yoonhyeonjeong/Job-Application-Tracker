@@ -64,7 +64,7 @@ export const RecentApplicationsTable = ({
     return <Skeleton active paragraph={{ rows: 2 }} />;
   }
   return (
-    <Card title="최근 지원 현황">
+    <Card title="최근 지원 현황" style={{ height: "100%" }}>
       <Table<ApplicationResponse>
         rowKey="id"
         columns={columns}
