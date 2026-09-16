@@ -16,12 +16,13 @@ import dayjs from "dayjs";
 import { SchedulePayload } from "@/types/schedule";
 import { postSchedule } from "@/services/scheduleApi";
 import axios from "axios";
+import { useMutation } from "@tanstack/react-query";
 
 interface ApplicationModalProps {
   open: boolean;
   applicationId: number;
   onCancel: () => void;
-  onSuccess: () => void;
+  onSuccess: () => void | Promise<void>; // 완료를 기다릴 수 있는 비동기 함수
 }
 
 const ApplicationModal = ({
@@ -30,13 +31,19 @@ const ApplicationModal = ({
   onCancel,
   onSuccess,
 }: ApplicationModalProps): ReactNode => {
-  const [loading, setLoading] = useState<boolean>(false);
   const [errorMsg, setErrorMsg] = useState<string | null>(null);
   const { message: messageApi } = AntdApp.useApp();
   const [form] = Form.useForm<SchedulePayload>();
 
+  const { mutateAsync, isPending } = useMutation({
+    mutationFn: postSchedule,
+    onSuccess: async () => {
+      await onSuccess(); // 등록 후 일정 재조회
+    },
+  });
+
   const handleSubmit = async (values: SchedulePayload) => {
-    setLoading(true);
+    setErrorMsg(null);
     try {
       const payload = {
         ...values,
@@ -45,17 +52,16 @@ const ApplicationModal = ({
         scheduledAt: dayjs(values.scheduledAt).format("YYYY-MM-DDTHH:mm:ss"),
         memo: values.memo?.trim() ?? "",
       };
-      await postSchedule(payload);
-      await onSuccess();
+      await mutateAsync(payload);
       messageApi.success("일정 등록을 성공했습니다.");
       form.resetFields();
       onCancel();
     } catch (error) {
-      if (axios.isAxiosError(error)) {
-        setErrorMsg(error.response?.data.message);
-      }
-    } finally {
-      setLoading(false);
+      setErrorMsg(
+        axios.isAxiosError(error) ?
+          (error.response?.data?.message ?? "일정 등록에 실패했습니다.")
+        : "일정 등록에 실패했습니다.",
+      );
     }
   };
 
@@ -68,6 +74,7 @@ const ApplicationModal = ({
         onCancel={onCancel}
         okText="등록"
         cancelText="취소"
+        confirmLoading={isPending}
       >
         {errorMsg && <Alert type="error" message={errorMsg} showIcon />}
 
