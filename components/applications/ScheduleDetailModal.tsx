@@ -7,7 +7,6 @@ import {
   DatePicker,
   Form,
   Input,
-  message,
   Modal,
   Popconfirm,
   Select,
@@ -25,12 +24,13 @@ import {
 import { deleteSchedule, updateSchedule } from "@/services/scheduleApi";
 import axios from "axios";
 import { DeleteOutlined } from "@ant-design/icons";
+import { useMutation } from "@tanstack/react-query";
 
 interface ScheduleDetailModalProps {
   schedule: ScheduleDetailResponse | ScheduleResponse;
   open: boolean;
   onCancel: () => void;
-  onSuccess: () => void;
+  onSuccess: () => void | Promise<void>;
 }
 
 type ScheduleFormValue = Omit<
@@ -46,11 +46,30 @@ const ScheduleDetailModal = ({
   onCancel,
   onSuccess,
 }: ScheduleDetailModalProps): ReactNode => {
-  const [loading, setLoading] = useState<boolean>(false);
   const [errorMsg, setErrorMsg] = useState<string | null>(null);
   const { message: messageApi } = AntdApp.useApp();
   const [form] = Form.useForm<ScheduleFormValue>();
-  const scheduleType = "scheduleType" in schedule ? schedule.scheduleType : schedule.type;
+  const scheduleType =
+    "scheduleType" in schedule ? schedule.scheduleType : schedule.type;
+
+  // 수정
+  const { mutateAsync, isPending } = useMutation({
+    mutationFn: (payload: UpdateSchedulePayload) =>
+      updateSchedule(schedule.id, payload),
+    // 요청에 성공했을 때 실행
+    onSuccess: async () => {
+      await onSuccess(); // 부모의 재조회가 끝날 때까지 기다림
+    },
+  });
+
+  // 삭제
+  const { mutateAsync: deleteMutateAsync, isPending: isDeletePending } =
+    useMutation({
+      mutationFn: (id: number) => deleteSchedule(id),
+      onSuccess: async () => {
+        await onSuccess(); // 부모의 재조회가 끝날 때까지 기다림
+      },
+    });
 
   const handleSubmit = async (values: ScheduleFormValue) => {
     const isSame =
@@ -63,7 +82,7 @@ const ScheduleDetailModal = ({
       messageApi.error("변경된 내용이 없습니다.");
       return;
     }
-    setLoading(true);
+    setErrorMsg(null);
 
     try {
       const payload: UpdateSchedulePayload = {
@@ -71,25 +90,30 @@ const ScheduleDetailModal = ({
         memo: values.memo?.trim(),
         scheduledAt: dayjs(values.scheduledAt).format("YYYY-MM-DDTHH:mm:ss"),
       };
-      await updateSchedule(schedule.id, payload);
-      await onSuccess();
+      await mutateAsync(payload);
       form.resetFields();
       onCancel();
     } catch (error) {
-      if (axios.isAxiosError(error)) {
-        setErrorMsg(error.response?.data.message);
-      }
-    } finally {
-      setLoading(false);
+      setErrorMsg(
+        axios.isAxiosError(error) ?
+          (error.response?.data?.message ?? "일정 수정에 실패했습니다.")
+        : "일정 수정에 실패했습니다.",
+      );
     }
   };
 
   const handleDeleteSchedule = async (id: number) => {
+    setErrorMsg(null);
     try {
-      await deleteSchedule(id);
-      await onSuccess();
+      await deleteMutateAsync(id);
       onCancel();
-    } catch (error) {}
+    } catch (error) {
+      setErrorMsg(
+        axios.isAxiosError(error) ?
+          (error.response?.data?.message ?? "일정 삭제에 실패했습니다.")
+        : "일정 삭제에 실패했습니다.",
+      );
+    }
   };
 
   useEffect(() => {
@@ -121,7 +145,13 @@ const ScheduleDetailModal = ({
             }}
             onConfirm={() => handleDeleteSchedule(schedule.id)}
           >
-            <Button danger type="text" icon={<DeleteOutlined />}>
+            <Button
+              danger
+              type="text"
+              disabled={isPending}
+              loading={isDeletePending}
+              icon={<DeleteOutlined />}
+            >
               삭제
             </Button>
           </Popconfirm>,
@@ -134,7 +164,12 @@ const ScheduleDetailModal = ({
             cancelText="아니오"
             onConfirm={() => form.submit()}
           >
-            <Button key="edit" type="text" loading={loading}>
+            <Button
+              key="edit"
+              type="text"
+              loading={isPending}
+              disabled={isDeletePending}
+            >
               수정
             </Button>
           </Popconfirm>,
