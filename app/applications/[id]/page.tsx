@@ -1,61 +1,61 @@
 "use client";
 
 import { useParams } from "next/navigation";
-import { useCallback, useEffect, useState, type ReactNode } from "react";
+import { useState } from "react";
 import { ApplicationDetail } from "@/components/applications/ApplicationDetail";
 import { PageHeader } from "@/components/common/PageHeader";
-import { ApplicationResponse } from "@/types/application";
 import {
   fetchDetailApplication,
   fetchDetailSchedule,
 } from "@/services/applicationApi";
-import { Col, Row, Skeleton, Typography } from "antd";
+import { Alert, Col, Row, Skeleton, Typography } from "antd";
 import { ScheduleCard } from "@/components/schedule/ScheduleCard";
 import { ScheduleDetailResponse } from "@/types/schedule";
 import ScheduleDetailModal from "@/components/applications/ScheduleDetailModal";
+import { useQuery } from "@tanstack/react-query";
+import {
+  ERROR_MESSAGES,
+  type DetailErrorType,
+} from "@/constants/applicationErrors";
 
 const ApplicationDetailPage = () => {
   const params = useParams();
   const id = Number(params.id);
+  const isValidId = Number.isFinite(id) && id > 0;
 
-  const [loading, setLoading] = useState<boolean>(false);
-  const [detailData, setDetailData] = useState<ApplicationResponse | null>(
-    null,
-  );
-  const [detailScheduleData, setDetailScheduleData] = useState<
-    ScheduleDetailResponse[]
-  >([]);
   const [detailModalOpen, setDetailModalOpen] = useState<boolean>(false);
-  const [selectedSchedule, SetSelectedSchedule] =
+  const [selectedSchedule, setSelectedSchedule] =
     useState<ScheduleDetailResponse | null>(null);
 
-  const getFetchDetailData = useCallback(async () => {
-    setLoading(true);
-    try {
-      const data = await fetchDetailApplication(Number(id));
-      setDetailData(data);
-    } catch (error) {
-      console.error(error);
-    } finally {
-      setLoading(false);
-    }
-  }, [id]);
+  const {
+    data: detailData,
+    isPending,
+    isError,
+    refetch,
+  } = useQuery({
+    queryKey: ["application", id],
+    queryFn: () => fetchDetailApplication(id),
+    enabled: isValidId,
+  });
 
-  const getFetchDetailScheduleData = useCallback(async () => {
-    setLoading(true);
-    try {
-      const data = await fetchDetailSchedule(Number(id));
-      setDetailScheduleData(data);
-    } catch (error) {
-      console.error(error);
-    } finally {
-      setLoading(false);
-    }
-  }, [id]);
+  const {
+    data: detailScheduleData = [],
+    isPending: scheduleLoading,
+    isError: scheduleError,
+    refetch: refetchSchedules,
+  } = useQuery({
+    queryKey: ["applicationSchedules", id],
+    queryFn: () => fetchDetailSchedule(id),
+    enabled: isValidId,
+  });
+
+  const handleApplicationUpdated = async () => {
+    await refetch();
+  };
 
   const handleOpenScheduleDetail = (v: ScheduleDetailResponse) => {
     setDetailModalOpen(true);
-    SetSelectedSchedule(v);
+    setSelectedSchedule(v);
   };
 
   const handleCloseScheduleDetail = () => {
@@ -63,15 +63,21 @@ const ApplicationDetailPage = () => {
   };
 
   const handleScheduleUpdated = async () => {
-    await getFetchDetailScheduleData();
-    handleCloseScheduleDetail();
+    await refetchSchedules();
   };
-  useEffect(() => {
-    getFetchDetailData();
-    getFetchDetailScheduleData();
-  }, [getFetchDetailData, getFetchDetailScheduleData]);
 
-  if (loading || !detailData) {
+  const errorStatus: DetailErrorType | null =
+    !isValidId ? "invalidId"
+    : isError ? "application"
+    : null;
+
+  if (errorStatus) {
+    return (
+      <Alert type="error" message={ERROR_MESSAGES[errorStatus]} showIcon />
+    );
+  }
+
+  if (scheduleLoading || isPending || !detailData) {
     return <Skeleton active paragraph={{ rows: 2 }} />;
   }
 
@@ -84,11 +90,14 @@ const ApplicationDetailPage = () => {
       {/* 지원 상세 */}
       <ApplicationDetail
         application={detailData}
-        onSuccess={getFetchDetailScheduleData}
-        onApplicationUpdateSuccess={getFetchDetailData}
+        onSuccess={refetchSchedules}
+        onApplicationUpdateSuccess={handleApplicationUpdated}
       />
 
-      {/* 일정 및 메모 */}
+      {scheduleError && (
+        <Alert type="error" message={ERROR_MESSAGES.schedule} showIcon />
+      )}
+
       {detailScheduleData.length > 0 && (
         <div className="mt-30">
           <Typography.Title level={3}>일정 및 메모</Typography.Title>
