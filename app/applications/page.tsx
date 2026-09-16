@@ -7,12 +7,10 @@ import { ApplicationFilter } from "@/components/applications/ApplicationFilter";
 import { ApplicationTable } from "@/components/applications/ApplicationTable";
 import { PageHeader } from "@/components/common/PageHeader";
 import { useApplications } from "@/hooks/useApplications";
-import { useApplicationStore } from "@/hooks/useApplicationStore";
 import { useRouter } from "next/navigation";
 
 const ApplicationsPage = (): ReactNode => {
-  const { applications, loading, filters, setFilters } = useApplications();
-  const error = useApplicationStore((state) => state.error);
+  const { applications, loading, filters, setFilters, error } = useApplications();
 
   const router = useRouter();
   return (

@@ -6,23 +6,18 @@ import { RecentApplicationsTable } from "@/components/dashboard/RecentApplicatio
 import { StatusOverview } from "@/components/dashboard/StatusOverview";
 import { SummaryCards } from "@/components/dashboard/SummaryCards";
 import { MonthlyOverview } from "@/components/dashboard/MonthlyOverview";
-import { useApplicationStore } from "@/hooks/useApplicationStore";
+import { useApplicationsQuery } from "@/hooks/useApplicationsQuery";
 import { UpcomingSchedules } from "@/components/dashboard/UpcomingSchedules";
 import useSchedules from "@/hooks/useSchedules";
 import useDashboard from "@/hooks/useDashboard";
-import { useEffect } from "react";
 
 const DashboardPage = () => {
-  // 지원목록 store
-  const { applications, loading, loadApplications } = useApplicationStore();
+  // 검색 필터를 적용하지 않은 전체 지원 목록
+  const { data: applications = [], isPending: loading } = useApplicationsQuery();
   // 다가오는 일정
   const { scheduleLoading, scheduleData } = useSchedules();
   // 대시보드
   const { dashboardLoading, summaryData, dashboardData } = useDashboard();
-
-  useEffect(() => {
-    loadApplications();
-  }, [loadApplications]);
 
   if (dashboardLoading || scheduleLoading || loading) {
     return <Skeleton active paragraph={{ rows: 2 }} />;

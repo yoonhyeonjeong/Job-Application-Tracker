@@ -1,32 +1,16 @@
 import { fetchStatisticsFunnel } from "@/services/statisticsApi";
-import { ApplicationFunnelResponse } from "@/types/statistics";
-import React, { useCallback, useEffect, useState } from "react";
+import { useQuery } from "@tanstack/react-query";
 
 const useStatistics = () => {
-  const [loading, setLoading] = useState<boolean>(false);
-  const [statisticsData, setStatisticsData] =
-    useState<ApplicationFunnelResponse | null>(null);
-
-  const loadStatistics = useCallback(async () => {
-    setLoading(true);
-    try {
-      const data = await fetchStatisticsFunnel();
-      setStatisticsData(data);
-    } catch (error) {
-      console.error(error);
-    } finally {
-      setLoading(false);
-    }
-  }, []);
-
-  useEffect(() => {
-    loadStatistics();
-  }, [loadStatistics]);
+  const { data, isPending, refetch } = useQuery({
+    queryKey: ["statistics"],
+    queryFn: fetchStatisticsFunnel,
+  });
 
   return {
-    statisticsLoading: loading,
-    statisticsData,
-    refreshStatistics: loadStatistics,
+    statisticsLoading: isPending,
+    statisticsData: data,
+    refreshStatistics: refetch,
   };
 };
 
