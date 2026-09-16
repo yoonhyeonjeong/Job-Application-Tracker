@@ -1,11 +1,10 @@
-import { MonthlyScheduleParams, ScheduleResponse } from "@/types/schedule";
-import { useCallback, useEffect, useState } from "react";
+import { MonthlyScheduleParams } from "@/types/schedule";
+import { useCallback, useState } from "react";
 import dayjs from "dayjs";
 import { fetchSchedule } from "@/services/scheduleApi";
+import { useQuery } from "@tanstack/react-query";
 
 const useCalendar = () => {
-  const [loading, setLoading] = useState<boolean>(false);
-  const [calendarData, setCalendarData] = useState<ScheduleResponse[]>([]);
   const [calendarParams, setCalendarParams] = useState<MonthlyScheduleParams>(
     () => ({
       startDate: dayjs().startOf("month").format("YYYY-MM-DD"),
@@ -13,33 +12,25 @@ const useCalendar = () => {
     }),
   );
 
-  const loadSchedules = useCallback(async (params: MonthlyScheduleParams) => {
-    try {
-      setLoading(true);
+  const {
+    data: calendarData = [],
+    isPending: calendarLoading,
+    refetch: refetchSchedules,
+  } = useQuery({
+    queryKey: ["schedules", calendarParams],
+    queryFn: () => fetchSchedule(calendarParams),
+  });
 
-      const data = await fetchSchedule(params);
-      setCalendarData(data);
-    } catch (error) {
-      console.error(error);
-    } finally {
-      setLoading(false);
-    }
+  const handleMonthChange = useCallback((params: MonthlyScheduleParams) => {
+    setCalendarParams(params);
   }, []);
 
-  const handleMonthChange = useCallback(
-    async (params: MonthlyScheduleParams) => {
-      setCalendarParams(params);
-      await loadSchedules(params);
-    },
-    [loadSchedules],
-  );
-
   const refreshSchedules = useCallback(async () => {
-    await loadSchedules(calendarParams);
-  }, [loadSchedules, calendarParams]);
+    await refetchSchedules();
+  }, [refetchSchedules]);
 
   return {
-    calendarLoading: loading,
+    calendarLoading: calendarLoading,
     calendarData,
     handleMonthChange,
     refreshSchedules,

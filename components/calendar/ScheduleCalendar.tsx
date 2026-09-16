@@ -18,7 +18,7 @@ import dayjs from "dayjs";
 
 interface ScheduleCalendarProps {
   schedule: ScheduleResponse[];
-  onMonthChange: (params: MonthlyScheduleParams) => Promise<void>;
+  onMonthChange: (params: MonthlyScheduleParams) => void;
   onSuccess: () => void;
 }
 
@@ -56,7 +56,7 @@ const ScheduleCalendar = ({
         .format("YYYY-MM-DD"),
     };
 
-    void onMonthChange(params);
+    onMonthChange(params);
   };
 
   const handleEventClick = (info: EventClickInfo) => {
