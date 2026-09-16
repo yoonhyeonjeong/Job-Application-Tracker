@@ -1,7 +1,7 @@
 "use client";
 
 import { Button, Card, Form, message } from "antd";
-import { useState, type ReactNode } from "react";
+import type { ReactNode } from "react";
 import type {
   ApplicationFormValues,
   CreateApplicationPayload,
@@ -11,35 +11,47 @@ import { postApplication } from "@/services/applicationApi";
 import { useRouter } from "next/navigation";
 import dayjs from "dayjs";
 import { ApplicationFormFields } from "@/components/applications/ApplicationFormFields";
+import { useMutation, useQueryClient } from "@tanstack/react-query";
 
 const ApplicationsNewPage = (): ReactNode => {
   const router = useRouter();
-  const [loading, setLoading] = useState<boolean>(false);
+  const queryClient = useQueryClient();
   const [form] = Form.useForm<ApplicationFormValues>();
   // 프리랜서인지 여부 체크
   const employmentType = Form.useWatch("employmentType", form);
   const isFreelance = employmentType === "freelance";
 
+  const { mutateAsync, isPending } = useMutation({
+    // 1. 실제 지원서 등록 API
+    mutationFn: postApplication,
+    // 2. 등록 API가 성공하면 실행
+    onSuccess: async () => {
+      await Promise.all([
+        queryClient.invalidateQueries({ queryKey: ["applications"] }),
+        queryClient.invalidateQueries({ queryKey: ["dashboard"] }),
+        queryClient.invalidateQueries({ queryKey: ["statistics"] }),
+      ]);
+    },
+  });
+
   const handleSubmit = async (values: ApplicationFormValues) => {
-    setLoading(true);
     try {
       const payload: CreateApplicationPayload = {
         ...values,
         appliedAt: dayjs(values.appliedAt).format("YYYY-MM-DD"),
-        deadline: values.deadline
-          ? dayjs(values.deadline).format("YYYY-MM-DD")
+        deadline:
+          values.deadline ?
+            dayjs(values.deadline).format("YYYY-MM-DD")
           : undefined,
         nextAction: values.nextAction?.trim(),
         memo: values.memo?.trim(),
       };
-      await postApplication(payload);
+      await mutateAsync(payload);
       message.success("지원 정보가 등록되었습니다.");
       router.push("/");
     } catch (error) {
       console.error(error);
-      message.success("지원 정보 등록 실패했습니다.");
-    } finally {
-      setLoading(false);
+      message.error("지원 정보 등록에 실패했습니다.");
     }
   };
 
@@ -57,7 +69,12 @@ const ApplicationsNewPage = (): ReactNode => {
           onFinish={handleSubmit}
         >
           <ApplicationFormFields showProjectName={isFreelance} />
-          <Button type="primary" htmlType="submit" className="full-width">
+          <Button
+            type="primary"
+            htmlType="submit"
+            className="full-width"
+            loading={isPending}
+          >
             지원 하러 가기
           </Button>
         </Form>
