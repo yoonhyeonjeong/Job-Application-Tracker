@@ -19,13 +19,13 @@ import {
 } from "@/types/application";
 import { updateApplication } from "@/services/applicationApi";
 import { ApplicationFormFields } from "./ApplicationFormFields";
+import { useMutation, useQueryClient } from "@tanstack/react-query";
 
 interface ApplicationeDetailModalProps {
   application: ApplicationResponse;
   open: boolean;
   id: number;
   onCancel: () => void;
-  onSuccess: () => Promise<void>;
 }
 
 const ApplicationDetailModal = ({
@@ -33,9 +33,8 @@ const ApplicationDetailModal = ({
   open,
   id,
   onCancel,
-  onSuccess,
 }: ApplicationeDetailModalProps): ReactNode => {
-  const [loading, setLoading] = useState<boolean>(false);
+  const queryClient = useQueryClient();
   const [errorMsg, setErrorMsg] = useState<string | null>(null);
   const { message: messageApi } = AntdApp.useApp();
   const [form] = Form.useForm<ApplicationFormValues>();
@@ -43,6 +42,21 @@ const ApplicationDetailModal = ({
   const employmentType = Form.useWatch("employmentType", form);
   const showProjectName =
     employmentType === "freelance" || Boolean(application.projectName);
+
+  // 수정
+  const { mutateAsync, isPending } = useMutation({
+    mutationFn: (payload: ApplicationUpdatePayload) =>
+      updateApplication(id, payload),
+    // 수정 성공 후 캐시 갱신
+    onSuccess: async () => {
+      await Promise.all([
+        queryClient.invalidateQueries({ queryKey: ["applications"] }),
+        queryClient.invalidateQueries({ queryKey: ["application", id] }),
+        queryClient.invalidateQueries({ queryKey: ["dashboard"] }),
+        queryClient.invalidateQueries({ queryKey: ["statistics"] }),
+      ]);
+    },
+  });
 
   const handleSubmit = async (values: ApplicationFormValues) => {
     const normalize = (value?: string | null) => value?.trim() ?? "";
@@ -67,27 +81,27 @@ const ApplicationDetailModal = ({
       messageApi.error("변경된 내용이 없습니다.");
       return;
     }
-    setLoading(true);
+    setErrorMsg(null);
 
     try {
       const payload: ApplicationUpdatePayload = {
         ...values,
         memo: values.memo?.trim(),
         appliedAt: dayjs(values.appliedAt).format("YYYY-MM-DD"),
-        deadline: values.deadline
-          ? dayjs(values.deadline).format("YYYY-MM-DD")
+        deadline:
+          values.deadline ?
+            dayjs(values.deadline).format("YYYY-MM-DD")
           : undefined,
       };
-      await updateApplication(id, payload);
-      await onSuccess();
+      await mutateAsync(payload);
       form.resetFields();
       onCancel();
     } catch (error) {
-      if (axios.isAxiosError(error)) {
-        setErrorMsg(error.response?.data.message);
-      }
-    } finally {
-      setLoading(false);
+      setErrorMsg(
+        axios.isAxiosError(error) ?
+          (error.response?.data?.message ?? "지원 정보 수정에 실패했습니다.")
+        : "지원 정보 수정에 실패했습니다.",
+      );
     }
   };
 
@@ -125,7 +139,7 @@ const ApplicationDetailModal = ({
             cancelText="아니오"
             onConfirm={() => form.submit()}
           >
-            <Button key="edit" type="text" loading={loading}>
+            <Button key="edit" type="text" loading={isPending}>
               수정
             </Button>
           </Popconfirm>,

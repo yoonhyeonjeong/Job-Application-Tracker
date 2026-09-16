@@ -31,7 +31,6 @@ const ApplicationDetailPage = () => {
     data: detailData,
     isPending,
     isError,
-    refetch,
   } = useQuery({
     queryKey: ["application", id],
     queryFn: () => fetchDetailApplication(id),
@@ -48,10 +47,6 @@ const ApplicationDetailPage = () => {
     queryFn: () => fetchDetailSchedule(id),
     enabled: isValidId,
   });
-
-  const handleApplicationUpdated = async () => {
-    await refetch();
-  };
 
   const handleOpenScheduleDetail = (v: ScheduleDetailResponse) => {
     setDetailModalOpen(true);
@@ -91,7 +86,6 @@ const ApplicationDetailPage = () => {
       <ApplicationDetail
         application={detailData}
         onSuccess={refetchSchedules}
-        onApplicationUpdateSuccess={handleApplicationUpdated}
       />
 
       {scheduleError && (

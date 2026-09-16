@@ -25,13 +25,11 @@ import ApplicationDetailModal from "./ApplicationDetailModal";
 interface ApplicationDetailProps {
   application: ApplicationResponse;
   onSuccess: () => void;
-  onApplicationUpdateSuccess: () => Promise<void>;
 }
 
 export const ApplicationDetail = ({
   application,
   onSuccess,
-  onApplicationUpdateSuccess,
 }: ApplicationDetailProps): ReactNode => {
   const { message: messageApi } = AntdApp.useApp();
   const router = useRouter();
@@ -170,7 +168,6 @@ export const ApplicationDetail = ({
         open={applicationModal}
         application={application}
         onCancel={handleCloseApplicationModal}
-        onSuccess={onApplicationUpdateSuccess}
         id={id}
       />
     </>
