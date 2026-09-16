@@ -21,6 +21,7 @@ import ApplicationModal from "./ApplicationModal";
 import { useParams, useRouter } from "next/navigation";
 import { deleteApplication } from "@/services/applicationApi";
 import ApplicationDetailModal from "./ApplicationDetailModal";
+import { useMutation, useQueryClient } from "@tanstack/react-query";
 
 interface ApplicationDetailProps {
   application: ApplicationResponse;
@@ -32,12 +33,28 @@ export const ApplicationDetail = ({
   onSuccess,
 }: ApplicationDetailProps): ReactNode => {
   const { message: messageApi } = AntdApp.useApp();
+  const queryClient = useQueryClient();
   const router = useRouter();
   const params = useParams();
   const id = Number(params.id);
   const [scheduleModal, setScheduleModalOpen] = useState<boolean>(false);
   const [applicationModal, setApplicationModalOpen] = useState<boolean>(false);
   const ddayDiff = getDaysSince(application?.appliedAt ?? "");
+
+  const { mutateAsync: deleteApplicationAsync, isPending: isDeletePending } =
+    useMutation({
+      mutationFn: deleteApplication,
+      onSuccess: async (_, deletedId) => {
+        // 삭제된 지원서 캐시 제거
+        queryClient.removeQueries({ queryKey: ["application", deletedId] });
+        // 지원서 목록·대시보드·통계 캐시 갱신
+        await Promise.all([
+          queryClient.invalidateQueries({ queryKey: ["applications"] }),
+          queryClient.invalidateQueries({ queryKey: ["dashboard"] }),
+          queryClient.invalidateQueries({ queryKey: ["statistics"] }),
+        ]);
+      },
+    });
 
   const handleOpenScheduleModal = () => {
     setScheduleModalOpen(true);
@@ -57,13 +74,14 @@ export const ApplicationDetail = ({
 
   const handleDeleteApplication = async (id: number) => {
     try {
-      await deleteApplication(id);
+      await deleteApplicationAsync(id);
       messageApi.success("지원 삭제 되었습니다.");
       router.push("/");
-    } catch (error) {}
+    } catch {
+      messageApi.error("지원 삭제에 실패했습니다.");
+    }
   };
 
-  console.log(id);
   return (
     <>
       <Card>
@@ -91,7 +109,12 @@ export const ApplicationDetail = ({
                   }}
                   onConfirm={() => handleDeleteApplication(id)}
                 >
-                  <Button danger type="primary" icon={<DeleteOutlined />}>
+                  <Button
+                    danger
+                    type="primary"
+                    icon={<DeleteOutlined />}
+                    loading={isDeletePending}
+                  >
                     삭제
                   </Button>
                 </Popconfirm>
@@ -130,9 +153,9 @@ export const ApplicationDetail = ({
               {application?.location ?? "-"}
             </Descriptions.Item>
             <Descriptions.Item label="지원일">
-              {application?.appliedAt
-                ? formatDate(application?.appliedAt)
-                : "-"}
+              {application?.appliedAt ?
+                formatDate(application?.appliedAt)
+              : "-"}
             </Descriptions.Item>
 
             <Descriptions.Item label="마감일">
