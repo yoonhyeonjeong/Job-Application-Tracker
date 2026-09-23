@@ -5,7 +5,7 @@ import ScheduleCalendar from "@/components/calendar/ScheduleCalendar";
 import useCalendar from "@/hooks/useCalendar";
 
 const CalendarPage = () => {
-  const { calendarData, handleMonthChange, refreshSchedules } = useCalendar();
+  const { calendarData, handleMonthChange } = useCalendar();
 
   return (
     <div className="page-stack">
@@ -17,7 +17,6 @@ const CalendarPage = () => {
       <ScheduleCalendar
         schedule={calendarData}
         onMonthChange={handleMonthChange}
-        onSuccess={refreshSchedules}
       />
     </div>
   );

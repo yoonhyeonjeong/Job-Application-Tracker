@@ -19,13 +19,11 @@ import dayjs from "dayjs";
 interface ScheduleCalendarProps {
   schedule: ScheduleResponse[];
   onMonthChange: (params: MonthlyScheduleParams) => void;
-  onSuccess: () => void;
 }
 
 const ScheduleCalendar = ({
   schedule,
   onMonthChange,
-  onSuccess,
 }: ScheduleCalendarProps) => {
   const [selectedSchedule, setSelectedSchedule] =
     useState<ScheduleResponse | null>(null);
@@ -107,7 +105,6 @@ const ScheduleCalendar = ({
           schedule={selectedSchedule}
           open={detailModalOpen}
           onCancel={handleCloseScheduleDetail}
-          onSuccess={onSuccess}
         />
       )}
     </>

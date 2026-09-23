@@ -17,9 +17,8 @@ import {
   ApplicationFormValues,
   ApplicationUpdatePayload,
 } from "@/types/application";
-import { updateApplication } from "@/services/applicationApi";
+import { useUpdateApplication } from "@/hooks/useApplicationMutations";
 import { ApplicationFormFields } from "./ApplicationFormFields";
-import { useMutation, useQueryClient } from "@tanstack/react-query";
 
 interface ApplicationeDetailModalProps {
   application: ApplicationResponse;
@@ -34,7 +33,6 @@ const ApplicationDetailModal = ({
   id,
   onCancel,
 }: ApplicationeDetailModalProps): ReactNode => {
-  const queryClient = useQueryClient();
   const [errorMsg, setErrorMsg] = useState<string | null>(null);
   const { message: messageApi } = AntdApp.useApp();
   const [form] = Form.useForm<ApplicationFormValues>();
@@ -44,19 +42,8 @@ const ApplicationDetailModal = ({
     employmentType === "freelance" || Boolean(application.projectName);
 
   // 수정
-  const { mutateAsync, isPending } = useMutation({
-    mutationFn: (payload: ApplicationUpdatePayload) =>
-      updateApplication(id, payload),
-    // 수정 성공 후 캐시 갱신
-    onSuccess: async () => {
-      await Promise.all([
-        queryClient.invalidateQueries({ queryKey: ["applications"] }),
-        queryClient.invalidateQueries({ queryKey: ["application", id] }),
-        queryClient.invalidateQueries({ queryKey: ["dashboard"] }),
-        queryClient.invalidateQueries({ queryKey: ["statistics"] }),
-      ]);
-    },
-  });
+  // 수정 요청과 관련 캐시 갱신을 함께 처리하는 공통 훅.
+  const { mutateAsync, isPending } = useUpdateApplication(id);
 
   const handleSubmit = async (values: ApplicationFormValues) => {
     const normalize = (value?: string | null) => value?.trim() ?? "";

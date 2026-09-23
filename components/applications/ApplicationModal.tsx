@@ -14,33 +14,26 @@ import { useState, type ReactNode } from "react";
 import { ScheduleOption } from "@/utils/format";
 import dayjs from "dayjs";
 import { SchedulePayload } from "@/types/schedule";
-import { postSchedule } from "@/services/scheduleApi";
+import { useCreateSchedule } from "@/hooks/useScheduleMutations";
 import axios from "axios";
-import { useMutation } from "@tanstack/react-query";
 
 interface ApplicationModalProps {
   open: boolean;
   applicationId: number;
   onCancel: () => void;
-  onSuccess: () => void | Promise<void>; // 완료를 기다릴 수 있는 비동기 함수
 }
 
 const ApplicationModal = ({
   open,
   applicationId,
   onCancel,
-  onSuccess,
 }: ApplicationModalProps): ReactNode => {
   const [errorMsg, setErrorMsg] = useState<string | null>(null);
   const { message: messageApi } = AntdApp.useApp();
   const [form] = Form.useForm<SchedulePayload>();
 
-  const { mutateAsync, isPending } = useMutation({
-    mutationFn: postSchedule,
-    onSuccess: async () => {
-      await onSuccess(); // 등록 후 일정 재조회
-    },
-  });
+  // 저장 후 관련 화면 갱신은 훅이 처리하므로 부모의 onSuccess가 필요 없다.
+  const { mutateAsync, isPending } = useCreateSchedule();
 
   const handleSubmit = async (values: SchedulePayload) => {
     setErrorMsg(null);

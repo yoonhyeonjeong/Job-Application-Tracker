@@ -95,7 +95,26 @@ app/calendar/page.tsx
   -> backend server
 ```
 
-## Commands
+## Query cache consistency
+
+`services/queryCache.ts` owns query keys and cache invalidation rules.
+`hooks/useApplicationMutations.ts` and `hooks/useScheduleMutations.ts` apply
+those rules after successful writes. Components should use these hooks instead
+of passing parent-specific refetch callbacks.
+
+- Schedule writes invalidate the affected application's schedules, all calendar
+  months, upcoming schedules, and dashboard.
+- Application writes invalidate the list, dashboard, statistics, and schedule
+  views (which include company names). Updates also invalidate that application's
+  detail and schedules; deletion removes those two detail caches.
+- Active queries refetch immediately; inactive queries refresh when next used.
+- A failed refetch preserves stale data and does not report the successful write
+  as a failed save. Error presentation is a separate concern.
+
+Run `npm test` with Node.js 22.18+ (or Node.js 24) for the cache regression tests.
+These use the real QueryClient and do not require a running backend.
+
+## Development commands
 
 ```bash
 npm run dev

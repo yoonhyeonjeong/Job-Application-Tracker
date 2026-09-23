@@ -1,5 +1,6 @@
 "use client";
 
+import { queryKeys } from "@/services/queryCache";
 import { useParams } from "next/navigation";
 import { useState } from "react";
 import { ApplicationDetail } from "@/components/applications/ApplicationDetail";
@@ -32,7 +33,7 @@ const ApplicationDetailPage = () => {
     isPending,
     isError,
   } = useQuery({
-    queryKey: ["application", id],
+    queryKey: queryKeys.application(id),
     queryFn: () => fetchDetailApplication(id),
     enabled: isValidId,
   });
@@ -41,9 +42,8 @@ const ApplicationDetailPage = () => {
     data: detailScheduleData = [],
     isPending: scheduleLoading,
     isError: scheduleError,
-    refetch: refetchSchedules,
   } = useQuery({
-    queryKey: ["applicationSchedules", id],
+    queryKey: queryKeys.applicationSchedules(id),
     queryFn: () => fetchDetailSchedule(id),
     enabled: isValidId,
   });
@@ -55,10 +55,6 @@ const ApplicationDetailPage = () => {
 
   const handleCloseScheduleDetail = () => {
     setDetailModalOpen(false);
-  };
-
-  const handleScheduleUpdated = async () => {
-    await refetchSchedules();
   };
 
   const errorStatus: DetailErrorType | null =
@@ -83,10 +79,7 @@ const ApplicationDetailPage = () => {
         description="지원 정보와 다음 액션을 확인합니다."
       />
       {/* 지원 상세 */}
-      <ApplicationDetail
-        application={detailData}
-        onSuccess={refetchSchedules}
-      />
+      <ApplicationDetail application={detailData} />
 
       {scheduleError && (
         <Alert type="error" message={ERROR_MESSAGES.schedule} showIcon />
@@ -115,7 +108,6 @@ const ApplicationDetailPage = () => {
           schedule={selectedSchedule}
           open={detailModalOpen}
           onCancel={handleCloseScheduleDetail}
-          onSuccess={handleScheduleUpdated}
         />
       )}
     </div>

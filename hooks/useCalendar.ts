@@ -1,3 +1,4 @@
+import { queryKeys } from "@/services/queryCache";
 import { MonthlyScheduleParams } from "@/types/schedule";
 import { useCallback, useState } from "react";
 import dayjs from "dayjs";
@@ -17,7 +18,7 @@ const useCalendar = () => {
     isPending: calendarLoading,
     refetch: refetchSchedules,
   } = useQuery({
-    queryKey: ["schedules", calendarParams],
+    queryKey: queryKeys.calendar(calendarParams),
     queryFn: () => fetchSchedule(calendarParams),
   });
 

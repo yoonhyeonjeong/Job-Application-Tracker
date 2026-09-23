@@ -21,16 +21,14 @@ import {
   ScheduleResponse,
   UpdateSchedulePayload,
 } from "@/types/schedule";
-import { deleteSchedule, updateSchedule } from "@/services/scheduleApi";
+import { useUpdateSchedule, useDeleteSchedule } from "@/hooks/useScheduleMutations";
 import axios from "axios";
 import { DeleteOutlined } from "@ant-design/icons";
-import { useMutation } from "@tanstack/react-query";
 
 interface ScheduleDetailModalProps {
   schedule: ScheduleDetailResponse | ScheduleResponse;
   open: boolean;
   onCancel: () => void;
-  onSuccess: () => void | Promise<void>;
 }
 
 type ScheduleFormValue = Omit<
@@ -44,7 +42,6 @@ const ScheduleDetailModal = ({
   schedule,
   open,
   onCancel,
-  onSuccess,
 }: ScheduleDetailModalProps): ReactNode => {
   const [errorMsg, setErrorMsg] = useState<string | null>(null);
   const { message: messageApi } = AntdApp.useApp();
@@ -53,23 +50,10 @@ const ScheduleDetailModal = ({
     "scheduleType" in schedule ? schedule.scheduleType : schedule.type;
 
   // 수정
-  const { mutateAsync, isPending } = useMutation({
-    mutationFn: (payload: UpdateSchedulePayload) =>
-      updateSchedule(schedule.id, payload),
-    // 요청에 성공했을 때 실행
-    onSuccess: async () => {
-      await onSuccess(); // 부모의 재조회가 끝날 때까지 기다림
-    },
-  });
-
-  // 삭제
+  // 수정·삭제 후 캐시 갱신은 공통 훅에 맡기고, 모달은 입력과 창 닫기를 담당한다.
+  const { mutateAsync, isPending } = useUpdateSchedule(schedule.applicationId, schedule.id);
   const { mutateAsync: deleteMutateAsync, isPending: isDeletePending } =
-    useMutation({
-      mutationFn: (id: number) => deleteSchedule(id),
-      onSuccess: async () => {
-        await onSuccess(); // 부모의 재조회가 끝날 때까지 기다림
-      },
-    });
+    useDeleteSchedule(schedule.applicationId);
 
   const handleSubmit = async (values: ScheduleFormValue) => {
     const isSame =

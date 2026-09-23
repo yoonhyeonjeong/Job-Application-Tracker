@@ -19,21 +19,17 @@ import { companyTypeLabels, employmentTypeLabels } from "@/utils/format";
 import { DeleteOutlined, EditOutlined, PlusOutlined } from "@ant-design/icons";
 import ApplicationModal from "./ApplicationModal";
 import { useParams, useRouter } from "next/navigation";
-import { deleteApplication } from "@/services/applicationApi";
+import { useDeleteApplication } from "@/hooks/useApplicationMutations";
 import ApplicationDetailModal from "./ApplicationDetailModal";
-import { useMutation, useQueryClient } from "@tanstack/react-query";
 
 interface ApplicationDetailProps {
   application: ApplicationResponse;
-  onSuccess: () => void;
 }
 
 export const ApplicationDetail = ({
   application,
-  onSuccess,
 }: ApplicationDetailProps): ReactNode => {
   const { message: messageApi } = AntdApp.useApp();
-  const queryClient = useQueryClient();
   const router = useRouter();
   const params = useParams();
   const id = Number(params.id);
@@ -41,20 +37,9 @@ export const ApplicationDetail = ({
   const [applicationModal, setApplicationModalOpen] = useState<boolean>(false);
   const ddayDiff = getDaysSince(application?.appliedAt ?? "");
 
+  // 삭제된 상세 캐시 제거와 다른 화면 갱신은 이 훅 안에서 처리한다.
   const { mutateAsync: deleteApplicationAsync, isPending: isDeletePending } =
-    useMutation({
-      mutationFn: deleteApplication,
-      onSuccess: async (_, deletedId) => {
-        // 삭제된 지원서 캐시 제거
-        queryClient.removeQueries({ queryKey: ["application", deletedId] });
-        // 지원서 목록·대시보드·통계 캐시 갱신
-        await Promise.all([
-          queryClient.invalidateQueries({ queryKey: ["applications"] }),
-          queryClient.invalidateQueries({ queryKey: ["dashboard"] }),
-          queryClient.invalidateQueries({ queryKey: ["statistics"] }),
-        ]);
-      },
-    });
+    useDeleteApplication();
 
   const handleOpenScheduleModal = () => {
     setScheduleModalOpen(true);
@@ -183,7 +168,6 @@ export const ApplicationDetail = ({
         open={scheduleModal}
         applicationId={id}
         onCancel={handleCloseScheduleModal}
-        onSuccess={onSuccess}
       />
 
       {/* 지원 상세 모달 (수정용) */}

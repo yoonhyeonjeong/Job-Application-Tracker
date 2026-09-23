@@ -1,10 +1,11 @@
+import { queryKeys } from "@/services/queryCache";
 import { fetchDashboard } from "@/services/dashboardApi";
 import { DashboardSummary } from "@/types/dashboard";
 import { useQuery } from "@tanstack/react-query";
 
 const useDashboard = () => {
   const { data, isPending, refetch } = useQuery({
-    queryKey: ["dashboard"],
+    queryKey: queryKeys.dashboard,
     queryFn: fetchDashboard,
   });
 

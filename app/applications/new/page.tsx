@@ -7,32 +7,20 @@ import type {
   CreateApplicationPayload,
 } from "@/types/application";
 import { PageHeader } from "@/components/common/PageHeader";
-import { postApplication } from "@/services/applicationApi";
+import { useCreateApplication } from "@/hooks/useApplicationMutations";
 import { useRouter } from "next/navigation";
 import dayjs from "dayjs";
 import { ApplicationFormFields } from "@/components/applications/ApplicationFormFields";
-import { useMutation, useQueryClient } from "@tanstack/react-query";
 
 const ApplicationsNewPage = (): ReactNode => {
   const router = useRouter();
-  const queryClient = useQueryClient();
   const [form] = Form.useForm<ApplicationFormValues>();
   // 프리랜서인지 여부 체크
   const employmentType = Form.useWatch("employmentType", form);
   const isFreelance = employmentType === "freelance";
 
-  const { mutateAsync, isPending } = useMutation({
-    // 1. 실제 지원서 등록 API
-    mutationFn: postApplication,
-    // 2. 등록 API가 성공하면 실행
-    onSuccess: async () => {
-      await Promise.all([
-        queryClient.invalidateQueries({ queryKey: ["applications"] }),
-        queryClient.invalidateQueries({ queryKey: ["dashboard"] }),
-        queryClient.invalidateQueries({ queryKey: ["statistics"] }),
-      ]);
-    },
-  });
+  // 등록 후 목록·대시보드 갱신은 훅이 처리하고, 이 화면은 메시지와 이동을 담당한다.
+  const { mutateAsync, isPending } = useCreateApplication();
 
   const handleSubmit = async (values: ApplicationFormValues) => {
     try {
