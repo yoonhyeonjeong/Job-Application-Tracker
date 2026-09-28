@@ -9,7 +9,7 @@ import {
   fetchDetailApplication,
   fetchDetailSchedule,
 } from "@/services/applicationApi";
-import { Alert, Col, Row, Skeleton, Typography } from "antd";
+import { Alert, Col, Row, Typography } from "antd";
 import { ScheduleCard } from "@/components/schedule/ScheduleCard";
 import { ScheduleDetailResponse } from "@/types/schedule";
 import ScheduleDetailModal from "@/components/applications/ScheduleDetailModal";
@@ -18,6 +18,7 @@ import {
   ERROR_MESSAGES,
   type DetailErrorType,
 } from "@/constants/applicationErrors";
+import { LoadingSpinner } from "@/components/common/Spin";
 
 const ApplicationDetailPage = () => {
   const params = useParams();
@@ -69,7 +70,7 @@ const ApplicationDetailPage = () => {
   }
 
   if (scheduleLoading || isPending || !detailData) {
-    return <Skeleton active paragraph={{ rows: 2 }} />;
+    return <LoadingSpinner />;
   }
 
   return (

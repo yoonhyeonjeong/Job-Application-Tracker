@@ -8,6 +8,7 @@ import { StatusTag } from "@/components/common/StatusTag";
 import type { ApplicationResponse } from "@/types/application";
 import { formatDate } from "@/utils/date";
 import { companyTypeLabels, employmentTypeLabels } from "@/utils/format";
+import { LoadingSpinner } from "@/components/common/Spin";
 
 interface ApplicationTableProps {
   applications: ApplicationResponse[];
@@ -79,12 +80,15 @@ export const ApplicationTable = ({
   applications,
   loading,
 }: ApplicationTableProps): ReactNode => {
+  if (loading) {
+    return <LoadingSpinner />;
+  }
+
   return (
     <Table<ApplicationResponse>
       rowKey="id"
       columns={columns}
       dataSource={applications}
-      loading={loading}
       scroll={{ x: 1000 }}
       pagination={{
         pageSize: 5, // 5개만 보여주기

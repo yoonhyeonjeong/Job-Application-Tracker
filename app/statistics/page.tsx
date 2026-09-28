@@ -4,8 +4,9 @@ import { PageHeader } from "@/components/common/PageHeader";
 import { SummaryCards } from "@/components/dashboard/SummaryCards";
 import useStatistics from "@/hooks/useStatistics";
 import useDashboard from "@/hooks/useDashboard";
-import { Alert, Button, Skeleton } from "antd";
+import { Alert, Button } from "antd";
 import StatisticsFunnel from "@/components/statistics/StatisticsFunnel";
+import { LoadingSpinner } from "@/components/common/Spin";
 
 const StatisticsPage = () => {
   // 통계함수 호출
@@ -24,7 +25,7 @@ const StatisticsPage = () => {
   } = useDashboard();
 
   if (statisticsLoading || dashboardLoading) {
-    return <Skeleton active paragraph={{ rows: 2 }} />;
+    return <LoadingSpinner />;
   }
   return (
     <div className="page-stack">

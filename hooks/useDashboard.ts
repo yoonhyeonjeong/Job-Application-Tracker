@@ -3,7 +3,7 @@ import { fetchDashboard } from "@/services/dashboardApi";
 import { DashboardSummary } from "@/types/dashboard";
 import { useQuery } from "@tanstack/react-query";
 
-const useDashboard = () => {
+export const useDashboard = () => {
   const { data, isPending, refetch, isError } = useQuery({
     queryKey: queryKeys.dashboard,
     queryFn: fetchDashboard,

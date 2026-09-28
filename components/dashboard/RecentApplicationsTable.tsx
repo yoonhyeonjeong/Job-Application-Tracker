@@ -1,11 +1,12 @@
 "use client";
-import { Alert, Button, Card, Skeleton, Table, Tag } from "antd";
+import { Alert, Button, Card, Table, Tag } from "antd";
 import type { ColumnsType } from "antd/es/table";
 import type { ReactNode } from "react";
 import { StatusTag } from "@/components/common/StatusTag";
 import type { ApplicationResponse } from "@/types/application";
 import { companyTypeLabels } from "@/utils/format";
 import { useRouter } from "next/navigation";
+import { LoadingSpinner } from "@/components/common/Spin";
 
 interface RecentApplicationsTableProps {
   applications: ApplicationResponse[];
@@ -65,7 +66,7 @@ export const RecentApplicationsTable = ({
 }: RecentApplicationsTableProps): ReactNode => {
   const router = useRouter();
   if (loading || !applications) {
-    return <Skeleton active paragraph={{ rows: 2 }} />;
+    return <LoadingSpinner />;
   }
   return (
     <Card title="최근 지원 현황" style={{ height: "100%" }}>

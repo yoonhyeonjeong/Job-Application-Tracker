@@ -4,9 +4,10 @@ import {
   ClockCircleOutlined,
   FileDoneOutlined,
 } from "@ant-design/icons";
-import { Card, Col, Row, Skeleton, Statistic } from "antd";
+import { Card, Col, Row, Statistic } from "antd";
 import type { ReactNode } from "react";
 import type { DashboardSummary } from "@/types/dashboard";
+import { LoadingSpinner } from "@/components/common/Spin";
 
 interface SummaryCardsProps {
   summary?: DashboardSummary;
@@ -18,7 +19,7 @@ export const SummaryCards = ({
   loading,
 }: SummaryCardsProps): ReactNode => {
   if (loading || !summary) {
-    return <Skeleton active paragraph={{ rows: 2 }} />;
+    return <LoadingSpinner />;
   }
 
   return (

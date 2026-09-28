@@ -1,10 +1,11 @@
-import { Alert, Button, Card, Flex, List, Skeleton, Space, Tag, Typography } from "antd";
+import { Alert, Button, Card, Flex, List, Space, Tag, Typography } from "antd";
 import type { ReactNode } from "react";
 import { formatDateTime, getDayLabel, getDday } from "@/utils/date";
 import { dayColorMap, scheduleTypeLabels } from "@/utils/schedules";
 import dayjs from "dayjs";
 import { ClockCircleOutlined } from "@ant-design/icons";
 import { ScheduleResponse } from "@/types/schedule";
+import { LoadingSpinner } from "@/components/common/Spin";
 
 interface UpcomingSchedulesProps {
   schedules: ScheduleResponse[];
@@ -15,7 +16,7 @@ interface UpcomingSchedulesProps {
 
 export const UpcomingSchedules = ({ schedules, loading, error, refetch }: UpcomingSchedulesProps): ReactNode => {
   if (loading || !schedules) {
-    return <Skeleton active paragraph={{ rows: 2 }} />;
+    return <LoadingSpinner />;
   }
   const schedulesData = [...schedules].slice(0, 3);
 

@@ -1,7 +1,7 @@
 "use client";
 
 import { PlusOutlined } from "@ant-design/icons";
-import { Alert, Button, Card, App as AntdApp } from "antd";
+import { Alert, Button, Card } from "antd";
 import { type ReactNode } from "react";
 import { ApplicationFilter } from "@/components/applications/ApplicationFilter";
 import { ApplicationTable } from "@/components/applications/ApplicationTable";
@@ -10,7 +10,8 @@ import { useApplications } from "@/hooks/useApplications";
 import { useRouter } from "next/navigation";
 
 const ApplicationsPage = (): ReactNode => {
-  const { applications, loading, filters, setFilters, error } = useApplications();
+  const { applications, loading, filters, setFilters, error, refresh } =
+    useApplications();
 
   const router = useRouter();
   return (
@@ -28,12 +29,24 @@ const ApplicationsPage = (): ReactNode => {
           </Button>
         }
       />
-      {error ? <Alert type="error" message={error} showIcon /> : null}
       <Card>
         <ApplicationFilter filters={filters} onChange={setFilters} />
       </Card>
       <Card>
-        <ApplicationTable applications={applications} loading={loading} />
+        {error ? (
+          <Alert
+            type="error"
+            message={error}
+            showIcon
+            action={
+              <Button size="small" onClick={() => void refresh()}>
+                다시 시도
+              </Button>
+            }
+          />
+        ) : (
+          <ApplicationTable applications={applications} loading={loading} />
+        )}
       </Card>
     </div>
   );

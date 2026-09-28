@@ -1,6 +1,6 @@
 "use client";
 
-import { Alert, Button, Col, Row, Skeleton } from "antd";
+import { Alert, Button, Col, Row } from "antd";
 import { PageHeader } from "@/components/common/PageHeader";
 import { RecentApplicationsTable } from "@/components/dashboard/RecentApplicationsTable";
 import { StatusOverview } from "@/components/dashboard/StatusOverview";
@@ -10,6 +10,7 @@ import { useApplicationsQuery } from "@/hooks/useApplicationsQuery";
 import { UpcomingSchedules } from "@/components/dashboard/UpcomingSchedules";
 import useSchedules from "@/hooks/useSchedules";
 import useDashboard from "@/hooks/useDashboard";
+import { LoadingSpinner } from "@/components/common/Spin";
 
 const DashboardPage = () => {
   // 검색 필터를 적용하지 않은 전체 지원 목록
@@ -25,7 +26,7 @@ const DashboardPage = () => {
   const { dashboardLoading, summaryData, dashboardData, dashboardError, refreshDashboard } = useDashboard();
 
   if (dashboardLoading || scheduleLoading || loading) {
-    return <Skeleton active paragraph={{ rows: 2 }} />;
+    return <LoadingSpinner />;
   }
 
   return (

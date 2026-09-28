@@ -4,9 +4,14 @@ import { PageHeader } from "@/components/common/PageHeader";
 import ScheduleCalendar from "@/components/calendar/ScheduleCalendar";
 import useCalendar from "@/hooks/useCalendar";
 import { Alert, Button } from "antd";
+import { LoadingSpinner } from "@/components/common/Spin";
 
 const CalendarPage = () => {
-  const { calendarData, handleMonthChange, calendarError, refreshSchedules } = useCalendar();
+  const { calendarData, calendarLoading, handleMonthChange, calendarError, refreshSchedules } = useCalendar();
+
+  if (calendarLoading) {
+    return <LoadingSpinner />;
+  }
 
   return (
     <div className="page-stack">
