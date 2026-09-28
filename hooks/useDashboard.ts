@@ -4,7 +4,7 @@ import { DashboardSummary } from "@/types/dashboard";
 import { useQuery } from "@tanstack/react-query";
 
 const useDashboard = () => {
-  const { data, isPending, refetch } = useQuery({
+  const { data, isPending, refetch, isError } = useQuery({
     queryKey: queryKeys.dashboard,
     queryFn: fetchDashboard,
   });
@@ -18,6 +18,7 @@ const useDashboard = () => {
 
   return {
     dashboardLoading: isPending,
+    dashboardError: isError,
     refreshDashboard: refetch,
     summaryData,
     dashboardData: data,

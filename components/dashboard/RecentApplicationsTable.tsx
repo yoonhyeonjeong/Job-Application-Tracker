@@ -1,5 +1,5 @@
 "use client";
-import { Card, Skeleton, Table, Tag } from "antd";
+import { Alert, Button, Card, Skeleton, Table, Tag } from "antd";
 import type { ColumnsType } from "antd/es/table";
 import type { ReactNode } from "react";
 import { StatusTag } from "@/components/common/StatusTag";
@@ -10,6 +10,8 @@ import { useRouter } from "next/navigation";
 interface RecentApplicationsTableProps {
   applications: ApplicationResponse[];
   loading?: boolean;
+  error?: boolean;
+  refetch?: () => void;
 }
 
 const columns: ColumnsType<ApplicationResponse> = [
@@ -58,6 +60,8 @@ const columns: ColumnsType<ApplicationResponse> = [
 export const RecentApplicationsTable = ({
   applications,
   loading,
+  error,
+  refetch,
 }: RecentApplicationsTableProps): ReactNode => {
   const router = useRouter();
   if (loading || !applications) {
@@ -65,22 +69,36 @@ export const RecentApplicationsTable = ({
   }
   return (
     <Card title="최근 지원 현황" style={{ height: "100%" }}>
-      <Table<ApplicationResponse>
-        rowKey="id"
-        columns={columns}
-        dataSource={applications}
-        loading={loading}
-        pagination={{
-          pageSize: 5, // 5개만 보여주기
-          showSizeChanger: false,
-        }}
-        size="middle"
-        onRow={(record) => ({
-          onClick: () => {
-            router.push(`/applications/${record.id}`);
-          },
-        })}
-      />
+      {error ?
+        <Alert
+          type="error"
+          showIcon
+          message="최근 지원 정보를 불러오지 못했습니다."
+          action={
+            <Button size="small" onClick={() => refetch?.()}>
+              다시 시도
+            </Button>
+          }
+        />
+      : <>
+          <Table<ApplicationResponse>
+            rowKey="id"
+            columns={columns}
+            dataSource={applications}
+            loading={loading}
+            pagination={{
+              pageSize: 5, // 5개만 보여주기
+              showSizeChanger: false,
+            }}
+            size="middle"
+            onRow={(record) => ({
+              onClick: () => {
+                router.push(`/applications/${record.id}`);
+              },
+            })}
+          />
+        </>
+      }
     </Card>
   );
 };

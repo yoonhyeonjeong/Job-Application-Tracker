@@ -6,16 +6,15 @@ import { fetchSchedule } from "@/services/scheduleApi";
 import { useQuery } from "@tanstack/react-query";
 
 const useCalendar = () => {
-  const [calendarParams, setCalendarParams] = useState<MonthlyScheduleParams>(
-    () => ({
-      startDate: dayjs().startOf("month").format("YYYY-MM-DD"),
-      endDate: dayjs().endOf("month").format("YYYY-MM-DD"),
-    }),
-  );
+  const [calendarParams, setCalendarParams] = useState<MonthlyScheduleParams>(() => ({
+    startDate: dayjs().startOf("month").format("YYYY-MM-DD"),
+    endDate: dayjs().endOf("month").format("YYYY-MM-DD"),
+  }));
 
   const {
     data: calendarData = [],
     isPending: calendarLoading,
+    isError: calendarError,
     refetch: refetchSchedules,
   } = useQuery({
     queryKey: queryKeys.calendar(calendarParams),
@@ -32,6 +31,7 @@ const useCalendar = () => {
 
   return {
     calendarLoading: calendarLoading,
+    calendarError,
     calendarData,
     handleMonthChange,
     refreshSchedules,

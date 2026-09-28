@@ -5,7 +5,7 @@ import { useQuery } from "@tanstack/react-query";
 import { fetchUpcomingSchedules } from "@/services/scheduleApi";
 
 const useSchedules = () => {
-  const { data, isPending, refetch } = useQuery({
+  const { data, isPending, isError, refetch } = useQuery({
     queryKey: queryKeys.upcomingSchedules,
     queryFn: fetchUpcomingSchedules,
   });
@@ -13,6 +13,7 @@ const useSchedules = () => {
   return {
     scheduleLoading: isPending,
     scheduleData: data ?? [],
+    scheduleError: isError,
     refreshStatistics: refetch,
   };
 };
