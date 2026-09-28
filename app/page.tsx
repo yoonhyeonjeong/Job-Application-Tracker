@@ -20,7 +20,7 @@ const DashboardPage = () => {
     refetch: refetchApplications,
   } = useApplicationsQuery();
   // 다가오는 일정
-  const { scheduleLoading, scheduleData, scheduleError, refreshStatistics } = useSchedules();
+  const { scheduleLoading, scheduleData, scheduleError, refreshSchedules } = useSchedules();
   // 대시보드
   const { dashboardLoading, summaryData, dashboardData, dashboardError, refreshDashboard } = useDashboard();
 
@@ -58,7 +58,7 @@ const DashboardPage = () => {
             schedules={scheduleData}
             loading={scheduleLoading}
             error={scheduleError}
-            refetch={refreshStatistics}
+            refetch={refreshSchedules}
           />
         </Col>
         <Col xs={24} xl={12}>

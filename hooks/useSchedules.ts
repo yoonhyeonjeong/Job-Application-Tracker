@@ -14,7 +14,7 @@ const useSchedules = () => {
     scheduleLoading: isPending,
     scheduleData: data ?? [],
     scheduleError: isError,
-    refreshStatistics: refetch,
+    refreshSchedules: refetch,
   };
 };
 

@@ -11,7 +11,7 @@ const CalendarPage = () => {
   return (
     <div className="page-stack">
       <PageHeader title="일정" description="면접, 과제, 마감일, 후속 연락 일정을 확인합니다." />
-      {calendarError && (
+      {calendarError ?
         <Alert
           type="error"
           showIcon
@@ -22,8 +22,7 @@ const CalendarPage = () => {
             </Button>
           }
         />
-      )}
-      <ScheduleCalendar schedule={calendarData} onMonthChange={handleMonthChange} />
+      : <ScheduleCalendar schedule={calendarData} onMonthChange={handleMonthChange} />}
     </div>
   );
 };
