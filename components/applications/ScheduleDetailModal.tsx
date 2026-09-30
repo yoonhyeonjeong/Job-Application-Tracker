@@ -8,6 +8,7 @@ import { ScheduleDetailResponse, ScheduleFormValue, ScheduleResponse, UpdateSche
 import { useUpdateSchedule, useDeleteSchedule } from "@/hooks/useScheduleMutations";
 import axios from "axios";
 import { DeleteOutlined } from "@ant-design/icons";
+import { serializeScheduleDate } from "@/utils/date";
 
 interface ScheduleDetailModalProps {
   schedule: ScheduleDetailResponse | ScheduleResponse;
@@ -43,7 +44,7 @@ const ScheduleDetailModal = ({ schedule, open, onCancel }: ScheduleDetailModalPr
       const payload: UpdateSchedulePayload = {
         ...values,
         memo: values.memo?.trim(),
-        scheduledAt: dayjs(values.scheduledAt).format("YYYY-MM-DDTHH:mm:ss"),
+        scheduledAt: serializeScheduleDate(values.scheduledAt),
       };
       await mutateAsync(payload);
       form.resetFields();

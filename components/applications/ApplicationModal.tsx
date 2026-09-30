@@ -3,10 +3,10 @@
 import { Alert, App as AntdApp, Card, DatePicker, Form, Input, Modal, Select } from "antd";
 import { useState, type ReactNode } from "react";
 import { ScheduleOption } from "@/utils/format";
-import dayjs from "dayjs";
 import { ScheduleFormValue } from "@/types/schedule";
 import { useCreateSchedule } from "@/hooks/useScheduleMutations";
 import axios from "axios";
+import { serializeScheduleDate } from "@/utils/date";
 
 interface ApplicationModalProps {
   open: boolean;
@@ -29,7 +29,7 @@ const ApplicationModal = ({ open, applicationId, onCancel }: ApplicationModalPro
         ...values,
         title: values.title?.trim() ?? "",
         applicationId: applicationId,
-        scheduledAt: dayjs(values.scheduledAt).format("YYYY-MM-DDTHH:mm:ss"),
+        scheduledAt: serializeScheduleDate(values.scheduledAt),
         memo: values.memo?.trim() ?? "",
       };
       await mutateAsync(payload);

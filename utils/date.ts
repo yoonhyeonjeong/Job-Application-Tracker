@@ -1,4 +1,4 @@
-import dayjs from "dayjs";
+import dayjs, { type Dayjs } from "dayjs";
 import "dayjs/locale/ko";
 
 // 날짜
@@ -26,4 +26,9 @@ export const getDday = (date: string) => {
 export const getDaysSince = (date: string) => {
   const diff = dayjs().startOf("day").diff(dayjs(date).startOf("day"), "day");
   return diff;
+};
+
+// value를 지정한 날짜 문자열로 변환해서 반환
+export const serializeScheduleDate = (value: Dayjs) => {
+  return value.format("YYYY-MM-DDTHH:mm:ss");
 };
