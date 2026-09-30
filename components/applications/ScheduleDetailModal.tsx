@@ -1,26 +1,10 @@
 "use client";
 
-import {
-  Alert,
-  Button,
-  Card,
-  DatePicker,
-  Form,
-  Input,
-  Modal,
-  Popconfirm,
-  Select,
-  App as AntdApp,
-} from "antd";
+import { Alert, Button, Card, DatePicker, Form, Input, Modal, Popconfirm, Select, App as AntdApp } from "antd";
 import { useEffect, useState, type ReactNode } from "react";
 import { ScheduleOption } from "@/utils/format";
-import dayjs, { Dayjs } from "dayjs";
-import {
-  ScheduleDetailResponse,
-  SchedulePayload,
-  ScheduleResponse,
-  UpdateSchedulePayload,
-} from "@/types/schedule";
+import dayjs from "dayjs";
+import { ScheduleDetailResponse, ScheduleFormValue, ScheduleResponse, UpdateSchedulePayload } from "@/types/schedule";
 import { useUpdateSchedule, useDeleteSchedule } from "@/hooks/useScheduleMutations";
 import axios from "axios";
 import { DeleteOutlined } from "@ant-design/icons";
@@ -31,29 +15,16 @@ interface ScheduleDetailModalProps {
   onCancel: () => void;
 }
 
-type ScheduleFormValue = Omit<
-  SchedulePayload,
-  "applicationId" | "scheduledAt"
-> & {
-  scheduledAt: Dayjs;
-};
-
-const ScheduleDetailModal = ({
-  schedule,
-  open,
-  onCancel,
-}: ScheduleDetailModalProps): ReactNode => {
+const ScheduleDetailModal = ({ schedule, open, onCancel }: ScheduleDetailModalProps): ReactNode => {
   const [errorMsg, setErrorMsg] = useState<string | null>(null);
   const { message: messageApi } = AntdApp.useApp();
   const [form] = Form.useForm<ScheduleFormValue>();
-  const scheduleType =
-    "scheduleType" in schedule ? schedule.scheduleType : schedule.type;
+  const scheduleType = "scheduleType" in schedule ? schedule.scheduleType : schedule.type;
 
   // 수정
   // 수정·삭제 후 캐시 갱신은 공통 훅에 맡기고, 모달은 입력과 창 닫기를 담당한다.
   const { mutateAsync, isPending } = useUpdateSchedule(schedule.applicationId, schedule.id);
-  const { mutateAsync: deleteMutateAsync, isPending: isDeletePending } =
-    useDeleteSchedule(schedule.applicationId);
+  const { mutateAsync: deleteMutateAsync, isPending: isDeletePending } = useDeleteSchedule(schedule.applicationId);
 
   const handleSubmit = async (values: ScheduleFormValue) => {
     const isSame =
@@ -129,13 +100,7 @@ const ScheduleDetailModal = ({
             }}
             onConfirm={() => handleDeleteSchedule(schedule.id)}
           >
-            <Button
-              danger
-              type="text"
-              disabled={isPending}
-              loading={isDeletePending}
-              icon={<DeleteOutlined />}
-            >
+            <Button danger type="text" disabled={isPending} loading={isDeletePending} icon={<DeleteOutlined />}>
               삭제
             </Button>
           </Popconfirm>,
@@ -148,12 +113,7 @@ const ScheduleDetailModal = ({
             cancelText="아니오"
             onConfirm={() => form.submit()}
           >
-            <Button
-              key="edit"
-              type="text"
-              loading={isPending}
-              disabled={isDeletePending}
-            >
+            <Button key="edit" type="text" loading={isPending} disabled={isDeletePending}>
               수정
             </Button>
           </Popconfirm>,
@@ -162,11 +122,7 @@ const ScheduleDetailModal = ({
         {errorMsg && <Alert type="error" message={errorMsg} showIcon />}
 
         <Card className={`application-form-card ${errorMsg ? "mt-20" : ""}`}>
-          <Form<ScheduleFormValue>
-            form={form}
-            layout="vertical"
-            onFinish={handleSubmit}
-          >
+          <Form<ScheduleFormValue> form={form} layout="vertical" onFinish={handleSubmit}>
             <Form.Item
               name="scheduleType"
               label="일정 유형"
@@ -203,21 +159,11 @@ const ScheduleDetailModal = ({
                 },
               ]}
             >
-              <DatePicker
-                showTime
-                format="YYYY-MM-DD HH:mm"
-                placeholder="날짜와 시간 선택"
-                className="full-width"
-              />
+              <DatePicker showTime format="YYYY-MM-DD HH:mm" placeholder="날짜와 시간 선택" className="full-width" />
             </Form.Item>
 
             <Form.Item name="memo" label="메모">
-              <Input.TextArea
-                rows={4}
-                maxLength={500}
-                showCount
-                placeholder="메모 입력"
-              />
+              <Input.TextArea rows={4} maxLength={500} showCount placeholder="메모 입력" />
             </Form.Item>
           </Form>
         </Card>

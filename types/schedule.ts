@@ -1,3 +1,4 @@
+import type { Dayjs } from "dayjs";
 export type ScheduleType = "interview" | "assignment";
 
 export interface MonthlyScheduleParams {
@@ -38,3 +39,7 @@ export interface ScheduleDetailResponse {
   scheduledAt: string;
   memo?: string;
 }
+
+export type ScheduleFormValue = Omit<SchedulePayload, "applicationId" | "scheduledAt"> & {
+  scheduledAt: Dayjs;
+};
