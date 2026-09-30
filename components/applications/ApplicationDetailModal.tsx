@@ -19,6 +19,7 @@ import {
 } from "@/types/application";
 import { useUpdateApplication } from "@/hooks/useApplicationMutations";
 import { ApplicationFormFields } from "./ApplicationFormFields";
+import { normalizeText } from "@/utils/form";
 
 interface ApplicationeDetailModalProps {
   application: ApplicationResponse;
@@ -46,23 +47,21 @@ const ApplicationDetailModal = ({
   const { mutateAsync, isPending } = useUpdateApplication(id);
 
   const handleSubmit = async (values: ApplicationFormValues) => {
-    const normalize = (value?: string | null) => value?.trim() ?? "";
-
     const isSame =
-      normalize(values.companyName) === normalize(application.companyName) &&
+      normalizeText(values.companyName) === normalizeText(application.companyName) &&
       values.companyType === application.companyType &&
       values.status === application.status &&
-      normalize(values.position) === normalize(application.position) &&
+      normalizeText(values.position) === normalizeText(application.position) &&
       values.employmentType === application.employmentType &&
-      normalize(values.projectName) === normalize(application.projectName) &&
+      normalizeText(values.projectName) === normalizeText(application.projectName) &&
       values.workType === application.workType &&
       values.jobPlatform === application.jobPlatform &&
-      normalize(values.location) === normalize(application.location) &&
+      normalizeText(values.location) === normalizeText(application.location) &&
       dayjs(values.appliedAt).isSame(dayjs(application.appliedAt), "day") &&
       ((!values.deadline && !application.deadline) ||
         dayjs(values.deadline).isSame(dayjs(application.deadline), "day")) &&
-      normalize(values.nextAction) === normalize(application.nextAction) &&
-      normalize(values.memo) === normalize(application.memo);
+      normalizeText(values.nextAction) === normalizeText(application.nextAction) &&
+      normalizeText(values.memo) === normalizeText(application.memo);
 
     if (isSame) {
       messageApi.error("변경된 내용이 없습니다.");

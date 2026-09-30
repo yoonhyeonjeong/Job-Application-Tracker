@@ -9,6 +9,7 @@ import { useUpdateSchedule, useDeleteSchedule } from "@/hooks/useScheduleMutatio
 import axios from "axios";
 import { DeleteOutlined } from "@ant-design/icons";
 import { serializeScheduleDate } from "@/utils/date";
+import { normalizeText } from "@/utils/form";
 
 interface ScheduleDetailModalProps {
   schedule: ScheduleDetailResponse | ScheduleResponse;
@@ -30,9 +31,9 @@ const ScheduleDetailModal = ({ schedule, open, onCancel }: ScheduleDetailModalPr
   const handleSubmit = async (values: ScheduleFormValue) => {
     const isSame =
       values.scheduleType === scheduleType &&
-      values.title.trim() === schedule.title.trim() &&
+      normalizeText(values.title) === normalizeText(schedule.title) &&
       values.scheduledAt.isSame(dayjs(schedule.scheduledAt)) &&
-      (values.memo?.trim() ?? "") === (schedule.memo?.trim() ?? "");
+      normalizeText(values.memo) === normalizeText(schedule.memo);
 
     if (isSame) {
       messageApi.error("변경된 내용이 없습니다.");
@@ -43,6 +44,7 @@ const ScheduleDetailModal = ({ schedule, open, onCancel }: ScheduleDetailModalPr
     try {
       const payload: UpdateSchedulePayload = {
         ...values,
+        title: normalizeText(values.title),
         memo: values.memo?.trim(),
         scheduledAt: serializeScheduleDate(values.scheduledAt),
       };

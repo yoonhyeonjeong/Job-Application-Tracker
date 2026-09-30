@@ -7,6 +7,7 @@ import { ScheduleFormValue } from "@/types/schedule";
 import { useCreateSchedule } from "@/hooks/useScheduleMutations";
 import axios from "axios";
 import { serializeScheduleDate } from "@/utils/date";
+import { normalizeText } from "@/utils/form";
 
 interface ApplicationModalProps {
   open: boolean;
@@ -27,7 +28,7 @@ const ApplicationModal = ({ open, applicationId, onCancel }: ApplicationModalPro
     try {
       const payload = {
         ...values,
-        title: values.title?.trim() ?? "",
+        title: normalizeText(values.title),
         applicationId: applicationId,
         scheduledAt: serializeScheduleDate(values.scheduledAt),
         memo: values.memo?.trim() ?? "",
