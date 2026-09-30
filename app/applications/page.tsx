@@ -2,14 +2,13 @@
 
 import { PlusOutlined } from "@ant-design/icons";
 import { Alert, Button, Card } from "antd";
-import { type ReactNode } from "react";
 import { ApplicationFilter } from "@/components/applications/ApplicationFilter";
 import { ApplicationTable } from "@/components/applications/ApplicationTable";
 import { PageHeader } from "@/components/common/PageHeader";
 import { useApplications } from "@/hooks/useApplications";
 import { useRouter } from "next/navigation";
 
-const ApplicationsPage = (): ReactNode => {
+const ApplicationsPage = () => {
   const { applications, loading, filters, setFilters, error, refresh } =
     useApplications();
 

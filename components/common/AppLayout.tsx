@@ -85,7 +85,7 @@ const getSelectedKey = (pathname: string): string => {
   return "/";
 };
 
-export const AppLayout = ({ children }: AppLayoutProps): ReactNode => {
+export const AppLayout = ({ children }: AppLayoutProps) => {
   const pathname = usePathname();
 
   return (

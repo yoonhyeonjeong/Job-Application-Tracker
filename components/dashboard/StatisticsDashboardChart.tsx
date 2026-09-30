@@ -1,7 +1,6 @@
 'use client';
 
 import { Card, Col, Row } from 'antd';
-import type { ReactNode } from 'react';
 import {
   Bar,
   BarChart,
@@ -40,7 +39,7 @@ const formatBarTooltip = (value: ValueType | undefined): [string, string] => {
   return [`${count}건`, '지원 수'];
 };
 
-export const StatisticsDashboardChart = ({ items }: StatisticsDashboardChartProps): ReactNode => {
+export const StatisticsDashboardChart = ({ items }: StatisticsDashboardChartProps) => {
   const total = items.reduce((sum, item) => sum + item.count, 0);
   const chartData: ChartDataItem[] = items.map((item) => ({
     name: statusLabels[item.status],

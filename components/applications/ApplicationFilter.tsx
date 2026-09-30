@@ -1,7 +1,6 @@
 "use client";
 
 import { Button, Input, Select, Space } from "antd";
-import type { ReactNode } from "react";
 import type { ApplicationFilterParams } from "@/types/application";
 import { employmentTypeOptions, statusOptions } from "@/utils/format";
 
@@ -13,7 +12,7 @@ interface ApplicationFilterProps {
 export const ApplicationFilter = ({
   filters,
   onChange,
-}: ApplicationFilterProps): ReactNode => {
+}: ApplicationFilterProps) => {
   return (
     <Space wrap className="filter-bar">
       <Input.Search

@@ -1,7 +1,6 @@
 'use client';
 
 import { Card, Col, Divider, Row, Space, Tag, Typography } from 'antd';
-import type { ReactNode } from 'react';
 
 const { Paragraph, Text, Title } = Typography;
 
@@ -93,7 +92,7 @@ const flowItems = [
   },
 ];
 
-export const ProjectGuide = (): ReactNode => {
+export const ProjectGuide = () => {
   return (
     <div className="page-stack">
       <Card>

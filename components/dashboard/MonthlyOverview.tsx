@@ -1,7 +1,6 @@
 "use client";
 
 import { Alert, Button, Card, Space } from "antd";
-import type { ReactNode } from "react";
 import type { MonthlyCount } from "@/types/dashboard";
 import { MonthlyChart } from "./MonthlyChart";
 
@@ -11,7 +10,7 @@ interface MonthlyOverviewProps {
   refetch?: () => void;
 }
 
-export const MonthlyOverview = ({ items, error, refetch }: MonthlyOverviewProps): ReactNode => {
+export const MonthlyOverview = ({ items, error, refetch }: MonthlyOverviewProps) => {
   return (
     <Card title="월별 지원 추이" style={{ height: "100%" }}>
       {error ?

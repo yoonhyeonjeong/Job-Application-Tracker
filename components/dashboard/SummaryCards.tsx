@@ -5,7 +5,6 @@ import {
   FileDoneOutlined,
 } from "@ant-design/icons";
 import { Card, Col, Row, Statistic } from "antd";
-import type { ReactNode } from "react";
 import type { DashboardSummary } from "@/types/dashboard";
 import { LoadingSpinner } from "@/components/common/Spin";
 
@@ -17,7 +16,7 @@ interface SummaryCardsProps {
 export const SummaryCards = ({
   summary,
   loading,
-}: SummaryCardsProps): ReactNode => {
+}: SummaryCardsProps) => {
   if (loading || !summary) {
     return <LoadingSpinner />;
   }

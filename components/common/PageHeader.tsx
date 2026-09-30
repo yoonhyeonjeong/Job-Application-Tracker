@@ -9,7 +9,7 @@ interface PageHeaderProps {
   action?: ReactNode;
 }
 
-export const PageHeader = ({ title, description, action }: PageHeaderProps): ReactNode => {
+export const PageHeader = ({ title, description, action }: PageHeaderProps) => {
   return (
     <div className="page-header">
       <div>

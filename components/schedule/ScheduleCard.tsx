@@ -1,7 +1,6 @@
 "use client";
 
 import { Card, Flex, Space, Tag, Typography } from "antd";
-import { type ReactNode } from "react";
 import { ScheduleDetailResponse } from "@/types/schedule";
 import dayjs from "dayjs";
 
@@ -13,7 +12,7 @@ interface ScheduleCardProps {
 export const ScheduleCard = ({
   data,
   onClick,
-}: ScheduleCardProps): ReactNode => {
+}: ScheduleCardProps) => {
   const ScheduleTypeLabel = data?.type === "interview" ? "면접" : "과제";
   return (
     <>

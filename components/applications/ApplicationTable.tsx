@@ -3,7 +3,6 @@
 import { Button, Space, Table, Tag } from "antd";
 import type { ColumnsType } from "antd/es/table";
 import Link from "next/link";
-import type { ReactNode } from "react";
 import { StatusTag } from "@/components/common/StatusTag";
 import type { ApplicationResponse } from "@/types/application";
 import { formatDate } from "@/utils/date";
@@ -79,7 +78,7 @@ const columns: ColumnsType<ApplicationResponse> = [
 export const ApplicationTable = ({
   applications,
   loading,
-}: ApplicationTableProps): ReactNode => {
+}: ApplicationTableProps) => {
   if (loading) {
     return <LoadingSpinner />;
   }

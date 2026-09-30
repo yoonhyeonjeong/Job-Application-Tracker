@@ -1,5 +1,4 @@
 import { Alert, Button, Card, Flex, List, Space, Tag, Typography } from "antd";
-import type { ReactNode } from "react";
 import { formatDateTime, getDayLabel, getDday } from "@/utils/date";
 import { dayColorMap, scheduleTypeLabels } from "@/utils/schedules";
 import dayjs from "dayjs";
@@ -14,7 +13,7 @@ interface UpcomingSchedulesProps {
   refetch?: () => void;
 }
 
-export const UpcomingSchedules = ({ schedules, loading, error, refetch }: UpcomingSchedulesProps): ReactNode => {
+export const UpcomingSchedules = ({ schedules, loading, error, refetch }: UpcomingSchedulesProps) => {
   if (loading || !schedules) {
     return <LoadingSpinner />;
   }

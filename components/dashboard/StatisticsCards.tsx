@@ -1,7 +1,6 @@
 'use client';
 
 import { Card, Col, Row, Statistic } from 'antd';
-import type { ReactNode } from 'react';
 
 interface StatisticsCardsProps {
   interviewRate: number;
@@ -9,7 +8,7 @@ interface StatisticsCardsProps {
   rejectedRate: number;
 }
 
-export const StatisticsCards = ({ interviewRate, offerRate, rejectedRate }: StatisticsCardsProps): ReactNode => {
+export const StatisticsCards = ({ interviewRate, offerRate, rejectedRate }: StatisticsCardsProps) => {
   return (
     <Row gutter={[16, 16]}>
       <Col xs={24} md={8}>

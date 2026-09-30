@@ -1,4 +1,4 @@
-﻿# 프로젝트 코드 작성 규칙
+# 프로젝트 코드 작성 규칙
 
 현재 저장소에서 반복되는 구조를 기준으로 정리한 지침이다. 기존 코드에는 export 방식, 타입 import, 줄바꿈 등이 혼재하므로 이를 모두 개인의 확정된 선호로 보지 않는다. 수정하는 파일의 스타일과 아래 역할 분리를 우선한다.
 
@@ -21,7 +21,7 @@
 
 - 함수형 컴포넌트를 사용한다. 일반적인 형태는 화살표 함수, 구조 분해한 props, 별도 `interface XxxProps`다.
 - props 인터페이스는 해당 컴포넌트 파일에 둔다. 여러 곳에서 사용하는 도메인 데이터 타입은 `types/`에서 가져온다.
-- 컴포넌트 반환 타입에 `ReactNode`를 명시하는 패턴이 많다. 기존 파일에 적용된 방식을 따른다.
+- 컴포넌트 반환 타입은 TypeScript 추론을 사용한다. `: ReactNode` 같은 반환 타입을 명시하지 않는다. `children`, `action` 등 props에 필요한 `ReactNode` 타입은 유지한다.
 - 페이지는 하위 컴포넌트와 훅을 조합한다. 예를 들어 지원 목록 페이지는 `useApplications`의 결과를 `ApplicationFilter`와 `ApplicationTable`에 전달한다.
 - 화면 조각은 도메인 폴더에 분리한다. 여러 화면에서 쓰는 UI는 `components/common/`에 둔다.
 - 상태와 이벤트가 필요한 클라이언트 경계에는 `"use client"`를 사용한다. 기존 서버 레이아웃까지 일괄적으로 클라이언트 컴포넌트로 바꾸지 않는다.
@@ -30,7 +30,6 @@
 기본 형태:
 
 ```tsx
-import type { ReactNode } from "react";
 import type { ApplicationResponse } from "@/types/application";
 
 interface ApplicationSummaryProps {
@@ -39,7 +38,7 @@ interface ApplicationSummaryProps {
 
 export const ApplicationSummary = ({
   application,
-}: ApplicationSummaryProps): ReactNode => {
+}: ApplicationSummaryProps) => {
   return <div>{application.companyName}</div>;
 };
 ```

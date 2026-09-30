@@ -1,7 +1,6 @@
 "use client";
 
 import { Alert, Button, Card, Space } from "antd";
-import type { ReactNode } from "react";
 import type { StatusOverviewItem } from "@/types/dashboard";
 import { StatusChart } from "./StatusChart";
 
@@ -11,7 +10,7 @@ interface StatusOverviewProps {
   refetch?: () => void;
 }
 
-export const StatusOverview = ({ items, error, refetch }: StatusOverviewProps): ReactNode => {
+export const StatusOverview = ({ items, error, refetch }: StatusOverviewProps) => {
   return (
     <Card title="지원 현황" style={{ height: "100%" }}>
       {error ?

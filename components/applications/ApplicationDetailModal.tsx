@@ -9,7 +9,7 @@ import {
   Popconfirm,
   App as AntdApp,
 } from "antd";
-import { useEffect, useState, type ReactNode } from "react";
+import { useEffect, useState } from "react";
 import dayjs from "dayjs";
 import axios from "axios";
 import {
@@ -33,7 +33,7 @@ const ApplicationDetailModal = ({
   open,
   id,
   onCancel,
-}: ApplicationeDetailModalProps): ReactNode => {
+}: ApplicationeDetailModalProps) => {
   const [errorMsg, setErrorMsg] = useState<string | null>(null);
   const { message: messageApi } = AntdApp.useApp();
   const [form] = Form.useForm<ApplicationFormValues>();

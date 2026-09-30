@@ -1,7 +1,6 @@
 "use client";
 
 import { Button, Card, Form, message } from "antd";
-import type { ReactNode } from "react";
 import type { ApplicationFormValues, CreateApplicationPayload } from "@/types/application";
 import { PageHeader } from "@/components/common/PageHeader";
 import { useCreateApplication } from "@/hooks/useApplicationMutations";
@@ -9,7 +8,7 @@ import { useRouter } from "next/navigation";
 import dayjs from "dayjs";
 import { ApplicationFormFields } from "@/components/applications/ApplicationFormFields";
 
-const ApplicationsNewPage = (): ReactNode => {
+const ApplicationsNewPage = () => {
   const router = useRouter();
   const [form] = Form.useForm<ApplicationFormValues>();
   // 프리랜서인지 여부 체크

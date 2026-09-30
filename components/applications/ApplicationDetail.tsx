@@ -11,7 +11,7 @@ import {
   Typography,
   App as AntdApp,
 } from "antd";
-import { useState, type ReactNode } from "react";
+import { useState } from "react";
 import { StatusTag } from "@/components/common/StatusTag";
 import type { ApplicationResponse } from "@/types/application";
 import { formatDate, getDaysSince } from "@/utils/date";
@@ -28,7 +28,7 @@ interface ApplicationDetailProps {
 
 export const ApplicationDetail = ({
   application,
-}: ApplicationDetailProps): ReactNode => {
+}: ApplicationDetailProps) => {
   const { message: messageApi } = AntdApp.useApp();
   const router = useRouter();
   const params = useParams();

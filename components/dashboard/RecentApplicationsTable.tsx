@@ -1,7 +1,6 @@
 "use client";
 import { Alert, Button, Card, Table, Tag } from "antd";
 import type { ColumnsType } from "antd/es/table";
-import type { ReactNode } from "react";
 import { StatusTag } from "@/components/common/StatusTag";
 import type { ApplicationResponse } from "@/types/application";
 import { companyTypeLabels } from "@/utils/format";
@@ -63,7 +62,7 @@ export const RecentApplicationsTable = ({
   loading,
   error,
   refetch,
-}: RecentApplicationsTableProps): ReactNode => {
+}: RecentApplicationsTableProps) => {
   const router = useRouter();
   if (loading || !applications) {
     return <LoadingSpinner />;

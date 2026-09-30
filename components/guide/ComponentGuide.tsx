@@ -17,7 +17,7 @@ import type { ApplicationFilterParams, ApplicationStatus } from '@/types/applica
 
 const statuses: ApplicationStatus[] = ['applied', 'documentPassed', 'interview', 'offer', 'rejected'];
 
-export const ComponentGuide = (): ReactNode => {
+export const ComponentGuide = () => {
   const [filters, setFilters] = useState<ApplicationFilterParams>({});
   const { applications, loading } = useApplications();
   const { scheduleData, scheduleLoading } = useSchedules();
@@ -85,7 +85,7 @@ interface GuideSectionProps {
   children: ReactNode;
 }
 
-const GuideSection = ({ title, description, children }: GuideSectionProps): ReactNode => {
+const GuideSection = ({ title, description, children }: GuideSectionProps) => {
   return (
     <Card>
       <Typography.Title level={4}>{title}</Typography.Title>

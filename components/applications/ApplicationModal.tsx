@@ -1,8 +1,8 @@
 "use client";
 
-import { Alert, App as AntdApp, Card, DatePicker, Form, Input, Modal, Select } from "antd";
-import { useState, type ReactNode } from "react";
-import { ScheduleOption } from "@/utils/format";
+import { Alert, App as AntdApp, Card, Form, Modal } from "antd";
+import { useState } from "react";
+import { ScheduleFormFields } from "./ScheduleFormFields";
 import { ScheduleFormValue } from "@/types/schedule";
 import { useCreateSchedule } from "@/hooks/useScheduleMutations";
 import axios from "axios";
@@ -15,7 +15,7 @@ interface ApplicationModalProps {
   onCancel: () => void;
 }
 
-const ApplicationModal = ({ open, applicationId, onCancel }: ApplicationModalProps): ReactNode => {
+const ApplicationModal = ({ open, applicationId, onCancel }: ApplicationModalProps) => {
   const [errorMsg, setErrorMsg] = useState<string | null>(null);
   const { message: messageApi } = AntdApp.useApp();
   const [form] = Form.useForm<ScheduleFormValue>();
@@ -61,48 +61,7 @@ const ApplicationModal = ({ open, applicationId, onCancel }: ApplicationModalPro
 
         <Card className={`application-form-card ${errorMsg ? "mt-20" : ""}`}>
           <Form<ScheduleFormValue> form={form} layout="vertical" onFinish={handleSubmit}>
-            <Form.Item
-              name="scheduleType"
-              label="일정 유형"
-              rules={[
-                {
-                  required: true,
-                  message: "일정 유형을 선택해주세요.",
-                },
-              ]}
-            >
-              <Select placeholder="일정 유형 선택" options={ScheduleOption} />
-            </Form.Item>
-
-            <Form.Item
-              name="title"
-              label="일정 제목"
-              rules={[
-                {
-                  required: true,
-                  message: "일정 제목을 입력해주세요.",
-                },
-              ]}
-            >
-              <Input placeholder="예: 1차 기술 면접" />
-            </Form.Item>
-
-            <Form.Item
-              name="scheduledAt"
-              label="일정 일시"
-              rules={[
-                {
-                  required: true,
-                  message: "일정 일시를 선택해주세요.",
-                },
-              ]}
-            >
-              <DatePicker showTime format="YYYY-MM-DD HH:mm" placeholder="날짜와 시간 선택" className="full-width" />
-            </Form.Item>
-
-            <Form.Item name="memo" label="메모">
-              <Input.TextArea rows={4} maxLength={500} showCount placeholder="메모 입력" />
-            </Form.Item>
+            <ScheduleFormFields />
           </Form>
         </Card>
       </Modal>
