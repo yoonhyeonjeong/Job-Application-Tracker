@@ -1,16 +1,6 @@
 "use client";
 
-import {
-  Button,
-  Card,
-  Descriptions,
-  Flex,
-  Popconfirm,
-  Space,
-  Tag,
-  Typography,
-  App as AntdApp,
-} from "antd";
+import { Button, Card, Descriptions, Flex, Popconfirm, Space, Tag, Typography, App as AntdApp } from "antd";
 import { useState } from "react";
 import { StatusTag } from "@/components/common/StatusTag";
 import type { ApplicationResponse } from "@/types/application";
@@ -26,9 +16,7 @@ interface ApplicationDetailProps {
   application: ApplicationResponse;
 }
 
-export const ApplicationDetail = ({
-  application,
-}: ApplicationDetailProps) => {
+export const ApplicationDetail = ({ application }: ApplicationDetailProps) => {
   const { message: messageApi } = AntdApp.useApp();
   const router = useRouter();
   const params = useParams();
@@ -38,8 +26,7 @@ export const ApplicationDetail = ({
   const ddayDiff = getDaysSince(application?.appliedAt ?? "");
 
   // 삭제된 상세 캐시 제거와 다른 화면 갱신은 이 훅 안에서 처리한다.
-  const { mutateAsync: deleteApplicationAsync, isPending: isDeletePending } =
-    useDeleteApplication();
+  const { mutateAsync: deleteApplicationAsync, isPending: isDeletePending } = useDeleteApplication();
 
   const handleOpenScheduleModal = () => {
     setScheduleModalOpen(true);
@@ -47,10 +34,6 @@ export const ApplicationDetail = ({
 
   const handleCloseScheduleModal = () => {
     setScheduleModalOpen(false);
-  };
-
-  const handleOpenApplicationModal = () => {
-    setApplicationModalOpen(true);
   };
 
   const handleCloseApplicationModal = () => {
@@ -73,14 +56,9 @@ export const ApplicationDetail = ({
         <Space direction="vertical" size="large" className="full-width">
           <Space direction="vertical" size={4} className="full-width">
             <Flex align="center" justify="space-between">
-              <Typography.Title level={3}>
-                {application?.companyName}
-              </Typography.Title>
+              <Typography.Title level={3}>{application?.companyName}</Typography.Title>
               <Flex align="center" justify="center" gap="small">
-                <Button
-                  icon={<EditOutlined />}
-                  onClick={() => setApplicationModalOpen(true)}
-                >
+                <Button icon={<EditOutlined />} onClick={() => setApplicationModalOpen(true)}>
                   수정
                 </Button>
                 <Popconfirm
@@ -94,12 +72,7 @@ export const ApplicationDetail = ({
                   }}
                   onConfirm={() => handleDeleteApplication(id)}
                 >
-                  <Button
-                    danger
-                    type="primary"
-                    icon={<DeleteOutlined />}
-                    loading={isDeletePending}
-                  >
+                  <Button danger type="primary" icon={<DeleteOutlined />} loading={isDeletePending}>
                     삭제
                   </Button>
                 </Popconfirm>
@@ -116,12 +89,8 @@ export const ApplicationDetail = ({
             </Flex>
 
             <Flex align="center" gap={8}>
-              <Typography.Text type="secondary">
-                {application?.position}
-              </Typography.Text>
-              <Typography.Text type="warning">
-                지원일로부터 {ddayDiff}일 지남
-              </Typography.Text>
+              <Typography.Text type="secondary">{application?.position}</Typography.Text>
+              <Typography.Text type="warning">지원일로부터 {ddayDiff}일 지남</Typography.Text>
             </Flex>
           </Space>
           <Descriptions bordered column={{ xs: 1, md: 2 }}>
@@ -131,16 +100,10 @@ export const ApplicationDetail = ({
             <Descriptions.Item label="회사유형">
               <Tag>{companyTypeLabels[application?.companyType]}</Tag>
             </Descriptions.Item>
-            <Descriptions.Item label="고용 형태">
-              {employmentTypeLabels[application?.employmentType]}
-            </Descriptions.Item>
-            <Descriptions.Item label="지역">
-              {application?.location ?? "-"}
-            </Descriptions.Item>
+            <Descriptions.Item label="고용 형태">{employmentTypeLabels[application?.employmentType]}</Descriptions.Item>
+            <Descriptions.Item label="지역">{application?.location ?? "-"}</Descriptions.Item>
             <Descriptions.Item label="지원일">
-              {application?.appliedAt ?
-                formatDate(application?.appliedAt)
-              : "-"}
+              {application?.appliedAt ? formatDate(application?.appliedAt) : "-"}
             </Descriptions.Item>
 
             <Descriptions.Item label="마감일">
@@ -148,9 +111,7 @@ export const ApplicationDetail = ({
             </Descriptions.Item>
 
             {application.projectName && (
-              <Descriptions.Item label="프로젝트명">
-                {application?.projectName ?? "-"}
-              </Descriptions.Item>
+              <Descriptions.Item label="프로젝트명">{application?.projectName ?? "-"}</Descriptions.Item>
             )}
             <Descriptions.Item label="다음 액션" span={{ xs: 1, md: 2 }}>
               {application.nextAction ?? "-"}
@@ -164,11 +125,7 @@ export const ApplicationDetail = ({
       </Card>
 
       {/* 일정등록 모달 */}
-      <ApplicationModal
-        open={scheduleModal}
-        applicationId={id}
-        onCancel={handleCloseScheduleModal}
-      />
+      <ApplicationModal open={scheduleModal} applicationId={id} onCancel={handleCloseScheduleModal} />
 
       {/* 지원 상세 모달 (수정용) */}
       <ApplicationDetailModal

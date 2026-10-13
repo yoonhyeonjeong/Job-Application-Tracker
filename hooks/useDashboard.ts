@@ -1,12 +1,14 @@
 import { queryKeys } from "@/services/queryCache";
 import { fetchDashboard } from "@/services/dashboardApi";
-import { DashboardSummary } from "@/types/dashboard";
+import type { DashboardResponse, DashboardSummary } from "@/types/dashboard";
 import { useQuery } from "@tanstack/react-query";
 
-export const useDashboard = () => {
+export const useDashboard = (initialDashboard?: DashboardResponse) => {
   const { data, isPending, refetch, isError } = useQuery({
     queryKey: queryKeys.dashboard,
     queryFn: fetchDashboard,
+    initialData: initialDashboard,
+    staleTime: initialDashboard ? 30_000 : 0,
   });
 
   const summaryData: DashboardSummary = {
