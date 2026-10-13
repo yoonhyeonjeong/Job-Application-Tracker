@@ -1,74 +1,29 @@
-"use client";
+import StatisticsContent from "@/components/statistics/StatisticsContent";
+import { fetchDashboardOnServer } from "@/services/dashboardServerApi";
+import { fetchStatisticsOnServer } from "@/services/statisticsServerApi";
 
-import { PageHeader } from "@/components/common/PageHeader";
-import { SummaryCards } from "@/components/dashboard/SummaryCards";
-import useStatistics from "@/hooks/useStatistics";
-import useDashboard from "@/hooks/useDashboard";
-import { Alert, Button } from "antd";
-import StatisticsFunnel from "@/components/statistics/StatisticsFunnel";
-import { LoadingSpinner } from "@/components/common/Spin";
+const StatisticsPage = async () => {
+  const [statisticsResult, dashboardResult] = await Promise.allSettled([
+    fetchStatisticsOnServer(),
+    fetchDashboardOnServer(),
+  ]);
 
-const StatisticsPage = () => {
-  // 통계함수 호출
-  const {
-    statisticsLoading,
-    statisticsError,
-    statisticsData,
-    refreshStatistics,
-  } = useStatistics();
-  // 대시보드 호출
-  const {
-    dashboardLoading,
-    dashboardError,
-    summaryData,
-    refreshDashboard,
-  } = useDashboard();
-
-  if (statisticsLoading || dashboardLoading) {
-    return <LoadingSpinner />;
+  if (statisticsResult.status === "rejected") {
+    console.error("통계 서버 조회 실패:", statisticsResult.reason);
   }
-  return (
-    <div className="page-stack">
-      <PageHeader
-        title="통계"
-        description="대시보드 차트로 지원 상태와 전환 지표를 확인합니다."
-      />
-      {dashboardError ? (
-        <Alert
-          type="error"
-          showIcon
-          message="지원 현황을 불러오지 못했습니다."
-          action={
-            <Button
-              size="small"
-              onClick={() => void refreshDashboard()}
-            >
-              다시 시도
-            </Button>
-          }
-        />
-      ) : (
-        <SummaryCards summary={summaryData} loading={dashboardLoading} />
-      )}
+  if (dashboardResult.status === "rejected") {
+    console.error("통계 페이지의 대시보드 요약 서버 조회 실패:", dashboardResult.reason);
+  }
 
-      {statisticsError ? (
-        <Alert
-          type="error"
-          showIcon
-          message="통계 정보를 불러오지 못했습니다."
-          action={
-            <Button
-              size="small"
-              onClick={() => void refreshStatistics()}
-            >
-              다시 시도
-            </Button>
-          }
-        />
-      ) : (
-        statisticsData && <StatisticsFunnel data={statisticsData} />
-      )}
-    </div>
+  return (
+    <StatisticsContent
+      initialStatistics={
+        statisticsResult.status === "fulfilled" ? statisticsResult.value : undefined
+      }
+      initialDashboard={
+        dashboardResult.status === "fulfilled" ? dashboardResult.value : undefined
+      }
+    />
   );
 };
 
